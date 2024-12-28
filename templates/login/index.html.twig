@@ -1,0 +1,20 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Serwisownik - Logowanie {% endblock %}
+
+{% block body %}
+<form action="{{ path('app_login') }}" method="POST">
+    <div class="">
+        <label>Email</label>
+        <input type="text" name="_username">
+    </div>
+    <div class="">
+        <label>Hasło</label>
+        <input type="text" name="_password">
+    </div>
+
+    <input type="hidden" name="_target_path" value="/">
+
+    <button type="submit">Zaloguj</button>
+</form>
+{% endblock %}

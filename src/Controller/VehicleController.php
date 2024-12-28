@@ -35,4 +35,29 @@ class VehicleController extends AbstractController
             'form' => $form,
         ]);
     }
+
+
+    #[Route('/vehicle', name: 'app_vehicle')]
+    public function showVehicles(Request $request, EntityManagerInterface $entityManager): Response
+    {
+        $form = $this->createForm(VehicleType::class, new Vehicle());
+
+        $form->handleRequest($request);
+
+        if($form ->isSubmitted() && $form->isValid()){
+            $vehicle = $form->getData();
+    
+            $entityManager->persist($vehicle);
+            $entityManager->flush();
+
+            $this->addFlash('success', 'Pojazd został dodany');
+
+            return $this->redirectToRoute('app_vehicle');
+        }
+
+
+        return $this->render('vehicle/index.html.twig', [
+            'form' => $form,
+        ]);
+    }
 }
