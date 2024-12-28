@@ -13,26 +13,12 @@ use Symfony\Component\Routing\Attribute\Route;
 class HomeController extends AbstractController
 {
     #[Route('/', name: 'app_index')]
-    public function index(Request $request, EntityManagerInterface $entityManager): Response
+    public function index(): Response
     {
-        $form = $this->createForm(VehicleType::class, new Vehicle());
-
-        $form->handleRequest($request);
-
-        if($form ->isSubmitted() && $form->isValid()){
-            $vehicle = $form->getData();
-
-            $entityManager->persist($vehicle);
-            $entityManager->flush();
-
-            $this->addFlash('success', 'Pojazd został dodany');
-
-            return $this->redirectToRoute('app_index');
-        }
-
 
         return $this->render('home/index.html.twig', [
-            'form' => $form,
+            'controller_name' => 'HomeController',
         ]);
+
     }
 }

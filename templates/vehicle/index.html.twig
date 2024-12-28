@@ -5,5 +5,12 @@
 {% block body %}
 <div class="grid grid-cols-8 w-full h-full w:md-2/3 mx-auto ">
         {{ include('shared/_form_nav.html.twig') }}
+        
+    <div class="col-span-6 grid grid-rows-7 w-full">
+        <div class="row-span-4 col-span-6">
+            {# {{ include('') }} #}
+        </div>
+            {{ include('vehicle/_form_vehicle_add.html.twig') }}
+    </div>
 </div>
 {% endblock %}
