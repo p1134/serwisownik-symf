@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Repository\RepairRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: RepairRepository::class)]
 class Repair
@@ -25,6 +26,10 @@ class Repair
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $description = null;
+
+    #[ORM\ManyToOne(inversedBy: 'repairs')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Vehicle $vehicle = null;
 
     public function getId(): ?int
     {
@@ -75,6 +80,18 @@ class Repair
     public function setDescription(?string $description): static
     {
         $this->description = $description;
+
+        return $this;
+    }
+
+    public function getVehicle(): ?Vehicle
+    {
+        return $this->vehicle;
+    }
+
+    public function setVehicle(?Vehicle $vehicle): static
+    {
+        $this->vehicle = $vehicle;
 
         return $this;
     }

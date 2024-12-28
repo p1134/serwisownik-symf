@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\VehicleRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: VehicleRepository::class)]
@@ -27,6 +29,17 @@ class Vehicle
 
     #[ORM\Column]
     private ?int $datePurchase = null;
+
+    /**
+     * @var Collection<int, Repair>
+     */
+    #[ORM\OneToMany(targetEntity: Repair::class, mappedBy: 'vehicle')]
+    private Collection $repairs;
+
+    public function __construct()
+    {
+        $this->repairs = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -89,6 +102,36 @@ class Vehicle
     public function setDatePurchase(int $datePurchase): static
     {
         $this->datePurchase = $datePurchase;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Repair>
+     */
+    public function getRepairs(): Collection
+    {
+        return $this->repairs;
+    }
+
+    public function addRepair(Repair $repair): static
+    {
+        if (!$this->repairs->contains($repair)) {
+            $this->repairs->add($repair);
+            $repair->setVehicle($this);
+        }
+
+        return $this;
+    }
+
+    public function removeRepair(Repair $repair): static
+    {
+        if ($this->repairs->removeElement($repair)) {
+            // set the owning side to null (unless already changed)
+            if ($repair->getVehicle() === $this) {
+                $repair->setVehicle(null);
+            }
+        }
 
         return $this;
     }
