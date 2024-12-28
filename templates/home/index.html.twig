@@ -3,12 +3,17 @@
 {# {% block title %}Hello HomeController!{% endblock %} #}
 
 {% block body %}
-<div class="grid grid-cols-7 w-full h-full">
-    <div class="col-span-2 bg-blue-700 h-screen">
-
+<div class="grid grid-cols-8 w-full h-full w:md-2/3 mx-auto ">
+    <div class="col-span-2 bg-blue-950 h-screen w-full flex flex-col place-items-center justify-center">
+        {{ include('home/_form_nav.html.twig') }}
     </div>
-    <div class="col-span-5">
-        {{ include('home/_form_vehicle_add.html.twig') }}
+    <div class="col-span-6 grid grid-rows-7 w-full">
+        <div class="row-span-4 col-span-6">
+            {# {{ include('') }} #}
+        </div>
+        <div class="row-span-3 bg-gray-200 w-full h-full mx-auto col-span-6 place-content-center">
+            {{ include('home/_form_vehicle_add.html.twig') }}
+        </div>
     </div>
 </div>
 {% endblock %}

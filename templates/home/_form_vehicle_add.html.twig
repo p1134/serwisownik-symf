@@ -1,3 +1,31 @@
     {{ form_start(form) }}
-
+    <div class="w-full mx-auto grid grid-rows-3 gap-5 h-full place-content-center">
+        <div class="w-full grid grid-cols-3 gap-20 font-mono">
+            <div class="flex flex-col">
+                {{ form_label(form.brand, 'Marka') }}
+                {{ form_widget(form.brand, {'attr':{'class': 'rounded-md border border-gray-300'}}) }}
+            </div>
+            <div class="flex flex-col">
+                {{ form_label(form.model, 'Model') }}
+                {{ form_widget(form.model, {'attr':{'class': 'rounded-md border border-gray-300'}}) }}
+            </div>
+            <div class="flex flex-col">
+                {{ form_label(form.year, 'Rok') }}
+                {{ form_widget(form.year, {'attr':{'class': 'rounded-md border border-gray-300'}}) }}
+            </div>
+        </div>
+        <div class="grid grid-cols-2 w-full gap-20">
+            <div class="flex flex-col">
+                {{ form_label(form.numberPlate, 'Tablice rejestracyjne') }}
+                {{ form_widget(form.numberPlate, {'attr':{'class': 'rounded-md border border-gray-300'}}) }}
+            </div>
+            <div class="flex flex-col">
+                {{ form_label(form.datePurchase, 'Data zakupu') }}
+                {{ form_widget(form.datePurchase, {'attr':{'class': 'rounded-md border border-gray-300'}}) }}
+            </div>
+        </div>
+        <div class="w-full">
+            <button type="submit" class="pl-8 pr-8 pt-2 pb-2 bg-blue-900 text-white text-md rounded-md w-auto font-mono font-semibold text-md h-fit mr-4">Dodaj</button>
+        </div>
+    </div>
     {{ form_end(form) }}

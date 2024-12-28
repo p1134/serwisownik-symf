@@ -2,7 +2,7 @@
 services:
 ###> doctrine/doctrine-bundle ###
   mysql:
-    image: mariadb:10.11.2
+    image: mariadb:10.8.3
     # Uncomment below when on Mac M1
     # platform: linux/arm64/v8
     command: --default-authentication-plugin=mysql_native_password

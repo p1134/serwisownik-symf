@@ -3,7 +3,6 @@
 namespace App\Entity;
 
 use App\Repository\VehicleRepository;
-use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: VehicleRepository::class)]
@@ -20,14 +19,14 @@ class Vehicle
     #[ORM\Column(length: 255)]
     private ?string $model = null;
 
-    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-    private ?\DateTimeInterface $datePurchase = null;
-
-    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-    private ?\DateTimeInterface $year = null;
+    #[ORM\Column]
+    private ?int $year = null;
 
     #[ORM\Column(length: 255)]
     private ?string $numberPlate = null;
+
+    #[ORM\Column]
+    private ?int $datePurchase = null;
 
     public function getId(): ?int
     {
@@ -58,24 +57,12 @@ class Vehicle
         return $this;
     }
 
-    public function getDatePurchase(): ?\DateTimeInterface
-    {
-        return $this->datePurchase;
-    }
-
-    public function setDatePurchase(\DateTimeInterface $datePurchase): static
-    {
-        $this->datePurchase = $datePurchase;
-
-        return $this;
-    }
-
-    public function getYear(): ?\DateTimeInterface
+    public function getYear(): ?int
     {
         return $this->year;
     }
 
-    public function setYear(\DateTimeInterface $year): static
+    public function setYear(int $year): static
     {
         $this->year = $year;
 
@@ -90,6 +77,18 @@ class Vehicle
     public function setNumberPlate(string $numberPlate): static
     {
         $this->numberPlate = $numberPlate;
+
+        return $this;
+    }
+
+    public function getDatePurchase(): ?int
+    {
+        return $this->datePurchase;
+    }
+
+    public function setDatePurchase(int $datePurchase): static
+    {
+        $this->datePurchase = $datePurchase;
 
         return $this;
     }
