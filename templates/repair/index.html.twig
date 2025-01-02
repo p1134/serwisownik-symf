@@ -8,9 +8,30 @@
         
     <div class="col-span-6 grid grid-rows-7 w-full">
         <div class="row-span-4 col-span-6">
-            {# {{ include('') }} #}
+        <table class="w-full">
+            <tr class="grid grid-cols-7">
+                <th>Nr</th>
+                <th>Pojazd</th>
+                <th>Serwisowana część</th>
+                <th>Koszt</th>
+                <th>Data</th>
+                <th>Opis</th>
+                <th>Akcja</th>
+            </tr>
+            {% if repairs|length > 0 %}
+                {% for repair in repairs %}
+                    {{ include('repair/_repair.html.twig', { 'repair': repair }) }}
+                {% endfor %}
+            {% endif %}
+        </table>  
         </div>
-            {{ include('repair/_form_repair_add.html.twig', {Vehicle: vehicle}) }}
+        {% if form_type == 'edit' %}
+            {% embed "repair/_edit_form.html.twig" %}{% endembed %}
+        {% else %}
+            {% embed "repair/_form_repair_add.html.twig" %}{% endembed %}
+        {% endif %}
+        
+            {# {{ include('repair/_form_repair_add.html.twig') }} #}
     </div>
 </div>
 {% endblock %}

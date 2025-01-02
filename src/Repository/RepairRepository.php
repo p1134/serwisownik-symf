@@ -20,13 +20,15 @@ class RepairRepository extends ServiceEntityRepository
         $query = $this->createQueryBuilder('r')
             ->leftJoin('r.vehicle', 'v')
             ->addSelect('v')
-            ->leftJoin('v.brand', 'b')
-            ->addSelect('b')
-            ->leftJoin('v.model', 'm')
-            ->addSelect('m')
             ->getQuery();
 
         return $query->getResult();
+    }
+
+    public function deleteRepair(Repair $repair){
+        $entityManager = $this->getEntityManager();
+        $entityManager->remove($repair);
+        $entityManager->flush();
     }
 
     //    /**

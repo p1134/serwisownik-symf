@@ -1,0 +1,12 @@
+<tr class="text-center border-t-2 border-gray-300 grid grid-cols-7">
+    <th>{{ loop.index }}</th>
+    <td>{{ repair.vehicle.brand }} {{ repair.vehicle.model }} | {{ repair.vehicle.numberPlate }} </td>
+    <td>{{ repair.part }}</td>
+    <td>{{ repair.price }} PLN</td>
+    <td>{{ repair.dateRepair | date('d-m-Y') }}</td>
+    <td class="flex flex-wrap">{{ repair.description }}</td>
+    <td class="flex gap-3 justify-center">
+        <a href="{{ path('app_repair_edit', {repair: repair.id}) }}"><i class="fa-solid fa-pen-to-square"></i></a>
+       <a href="{{ path('app_repair_remove', {repair: repair.id}) }}"><i class="fa-solid fa-trash"></i></a>
+    </td>
+</tr>

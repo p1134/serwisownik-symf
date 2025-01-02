@@ -4,8 +4,9 @@ namespace App\Controller;
 
 
 use App\Entity\Repair;
+use App\Entity\Vehicle;
 use App\Form\RepairType;
-use App\Form\VehicleType;
+use App\Repository\RepairRepository;
 use App\Repository\VehicleRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -16,7 +17,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 class RepairController extends AbstractController
 {
     #[Route('/repair', name: 'app_repair')]
-    public function add(Request $request, EntityManagerInterface $entityManager, VehicleType $vehicle): Response
+    public function add(Request $request, EntityManagerInterface $entityManager, RepairRepository $repairs): Response
     {
         $form = $this->createForm(RepairType::class, new Repair());
 
@@ -24,7 +25,6 @@ class RepairController extends AbstractController
 
         if($form->isSubmitted() && $form->isValid()){
             $repair = $form->getData();
-            $repair->setVehicle($vehicle);
 
             $entityManager->persist($repair);
             $entityManager->flush();
@@ -37,7 +37,39 @@ class RepairController extends AbstractController
         return $this->render('repair/index.html.twig', [
             'controller_name' => 'RepairController',
             'form' => $form,
-            'vehicle' => $vehicle,
+            'repairs' => $repairs->findAllByVehicle(),
+            'form_type' => 'add'
         ]);
+    }
+
+    #[Route('/repair/{repair}/edit', name: 'app_repair_edit')]
+    public function editRepair(Request $request, EntityManagerInterface $entityManager, RepairRepository $repairs, Repair $repair): Response{
+        $form = $this->createForm(RepairType::class, $repair);
+        $form->handleRequest($request);
+
+        if($form->isSubmitted() && $form->isValid()){
+
+            $repair = $form->getData();
+
+            $entityManager->persist($repair);
+            $entityManager->flush();
+
+            $this->addFlash('success', 'Edytowano pomyślnie');
+
+            return $this->redirectToRoute('app_repair');
+        }
+
+        return $this->render('repair/index.html.twig', [
+            'form' => $form,
+            'repairs' => $repairs->findAllByVehicle(),
+            'repair' => $repair,
+            'form_type' => 'edit'
+        ]);
+    }
+
+    #[Route('/repair/{repair}/remove', name: 'app_repair_remove')]
+    public function removeRepair(RepairRepository $repairs, Repair $repair):Response{
+        $repairs->deleteRepair($repair);
+        return $this->redirectToRoute('app_repair');
     }
 }
