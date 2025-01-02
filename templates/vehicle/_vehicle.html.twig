@@ -1,0 +1,12 @@
+<tr class="text-center border-t-2 border-gray-300">
+    <th>{{ loop.index }}</th>
+    <td>{{ vehicle.brand }} {{ vehicle.model }}</td>
+    <td>{{ vehicle.year }}</td>
+    <td>{{ vehicle.numberPlate }}</td>
+    <td>{{ vehicle.datePurchase }}</td>
+    <td>{{ vehicle.service | date('d-m-Y') }}</td>
+    <td class="flex gap-3 justify-center">
+        <a href="{{ path('app_vehicle_edit', {vehicle: vehicle.id}) }}"><i class="fa-solid fa-pen-to-square"></i></a>
+       <a href="{{ path('app_vehicle_remove', {vehicle: vehicle.id}) }}"><i class="fa-solid fa-trash"></i></a>
+    </td>
+</tr>

@@ -2,6 +2,10 @@
     {{ form_start(form) }}
     <div class="w-full mx-auto grid grid-rows-3 gap-5 h-full place-content-center">
         <div class="w-full grid grid-cols-3 gap-20 font-mono">
+            {# <div class="flex flex-col"> 
+                {{ form_label(form.vehicle, 'Pojazd') }}
+                {{ form_widget(form.vehicle, {'attr':{'class': 'rounded-md border border-gray-300'}}) }}
+            </div> #}
             <div class="flex flex-col">
                 {{ form_errors(form) }}
                 {{ form_label(form.part, 'Naprawa') }}

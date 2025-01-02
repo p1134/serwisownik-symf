@@ -4,6 +4,8 @@ namespace App\Repository;
 
 use App\Entity\Vehicle;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -16,6 +18,22 @@ class VehicleRepository extends ServiceEntityRepository
         parent::__construct($registry, Vehicle::class);
     }
 
+
+    public function findAllByOwner():array{
+        $query = $this->createQueryBuilder('v')
+            ->leftJoin('v.owner', 'o')
+            ->addSelect('o')
+            ->getQuery();
+
+        return $query->getResult();
+
+    }
+
+    public function deleteVehicle(Vehicle $vehicle){
+        $entityManager = $this->getEntityManager();
+       $entityManager ->remove($vehicle);
+        $entityManager->flush();
+    }
     //    /**
     //     * @return Vehicle[] Returns an array of Vehicle objects
     //     */

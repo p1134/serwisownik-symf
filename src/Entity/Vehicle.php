@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Repository\VehicleRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: VehicleRepository::class)]
@@ -39,6 +40,9 @@ class Vehicle
     #[ORM\ManyToOne(inversedBy: 'vehicles')]
     #[ORM\JoinColumn(nullable: false)]
     private ?User $owner = null;
+
+    #[ORM\Column(type: Types::DATE_MUTABLE)]
+    private ?\DateTimeInterface $service = null;
 
     public function __construct()
     {
@@ -148,6 +152,18 @@ class Vehicle
     public function setOwner(?User $owner): static
     {
         $this->owner = $owner;
+
+        return $this;
+    }
+
+    public function getService(): ?\DateTimeInterface
+    {
+        return $this->service;
+    }
+
+    public function setService(\DateTimeInterface $service): static
+    {
+        $this->service = $service;
 
         return $this;
     }

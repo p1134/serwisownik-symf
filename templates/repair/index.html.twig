@@ -10,7 +10,7 @@
         <div class="row-span-4 col-span-6">
             {# {{ include('') }} #}
         </div>
-            {{ include('repair/_form_repair_add.html.twig') }}
+            {{ include('repair/_form_repair_add.html.twig', {Vehicle: vehicle}) }}
     </div>
 </div>
 {% endblock %}

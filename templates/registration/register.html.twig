@@ -1,23 +1,45 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Register{% endblock %}
+{% block title %}Serwisownik - Rejestracja{% endblock %}
 
 {% block body %}
+<div class="w-full h-screen bg-blue-950 flex flex-col gap-6 justify-center place-items-center text-white font-mono">
+
+
     {% for flash_error in app.flashes('verify_email_error') %}
         <div class="alert alert-danger" role="alert">{{ flash_error }}</div>
     {% endfor %}
-
-    <h1>Register</h1>
-
-    {{ form_errors(registrationForm) }}
-
+    
     {{ form_start(registrationForm) }}
-        {{ form_row(registrationForm.email) }}
-        {{ form_row(registrationForm.plainPassword, {
-            label: 'Password'
-        }) }}
-        {{ form_row(registrationForm.agreeTerms) }}
 
-        <button type="submit" class="btn">Register</button>
-    {{ form_end(registrationForm) }}
-{% endblock %}
+    <div class="flex flex-col gap-8 place-items-center">
+        <div class=""><img src="{{ asset('img/logo.png') }}" class="w-24"></div>
+
+        <h1 class="text-4xl font-semibold">Rejestracja</h1>
+
+        {{ form_errors(registrationForm) }}
+        <div class="relative">
+            {{ form_widget(registrationForm.email, {'attr': {'class': 'custom-widget flex bg-transparent border-2 border-white rounded-md p-1 pl-3 pr-3', 'placeholder': ' '}}) }}
+            {{ form_label(registrationForm.email, 'Email', {'label_attr': {'class': 'custom-label'}}) }}
+        </div>
+        <div class="relative">
+            {{ form_widget(registrationForm.plainPassword.first, {'attr': {'class': 'custom-widget flex bg-transparent border-2 border-white rounded-md p-1 pl-3 pr-3', 'placeholder': ' '}}) }}
+            {{ form_label(registrationForm.plainPassword, 'Hasło', {'label_attr': {'class': 'custom-label', 'for': 'registration_form_plainPassword_first'}}) }}
+        </div>
+        <div class="relative">
+            {{ form_widget(registrationForm.plainPassword.second, {'attr': {'class': 'custom-widget flex bg-blue-950 border-2 border-white rounded-md p-1 pl-3 pr-3', 'placeholder': ' '}}) }}
+            {{ form_label(registrationForm.plainPassword, 'Powtórz hasło', {'label_attr': {'class': 'custom-label', 'for': 'registration_form_plainPassword_second'}}) }}
+        </div>
+        <div class="w-full ml-2">
+            <div class="flex w-full place-items-center">
+                {{ form_label(registrationForm.agreeTerms, 'Akceptuję warunki', {'label_attr':{'class': 'text-sm'}}) }}
+                {{ form_widget(registrationForm.agreeTerms, {'attr':{'class': 'ml-4'}}) }}
+            </div>
+                <a href="{{ path('app_login') }}" class="text-sm text-gray-400">Mam konto</a>
+        </div>
+
+            <button type="submit" class="btn rounded-md bg-blue-700 border border-blue-800 p-2 pr-5 pl-5">Zarejestruj</button>
+        {{ form_end(registrationForm) }}
+    </div>
+</div>
+{% endblock %}  

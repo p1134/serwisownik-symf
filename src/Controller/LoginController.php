@@ -14,6 +14,8 @@ class LoginController extends AbstractController
     {
         $lastUsername = $utils->getLastUsername();
         $error = $utils->getLastAuthenticationError();
+        
+        $this->addFlash('error', 'Błędne dane logowania');
 
         return $this->render('login/index.html.twig', [
             'controller_name' => 'LoginController',
@@ -21,4 +23,7 @@ class LoginController extends AbstractController
             'error' => $error,
         ]);
     }
+
+    #[Route('/logout', name: 'app_logout')]
+    public function logout(){}
 }

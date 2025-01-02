@@ -6,6 +6,7 @@ use App\Entity\Vehicle;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 
 class VehicleType extends AbstractType
@@ -29,6 +30,10 @@ class VehicleType extends AbstractType
                     'min' => 1900,
                     'max' => $today->format('Y'),
                 ]
+            ])
+            ->add('service', DateType::class, [
+                'widget' => 'single_text',
+                'data' => new \DateTime('now'),
             ])
         ;
     }
