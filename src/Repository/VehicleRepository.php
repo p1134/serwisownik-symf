@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Vehicle;
+use DateTime;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
@@ -35,6 +36,23 @@ class VehicleRepository extends ServiceEntityRepository
         $entityManager = $this->getEntityManager();
        $entityManager ->remove($vehicle);
         $entityManager->flush();
+    }
+
+    public function nextService($user, $now){
+        $query = $this->createQueryBuilder('v')
+            ->leftJoin('v.owner', 'o')
+            ->addSelect('o')
+            ->where('v.owner = :ownerId')
+            ->setParameter('ownerId', $user->getId())
+            ->select('MIN(v.service) as min_service')
+            ->andWhere('v.service >= :now')
+            ->setParameter('now', $now)
+            ->getQuery();
+        
+            // var_dump($query->getResult());
+            // var_dump($now);
+        return $query->getSingleScalarResult();
+            
     }
 
     

@@ -6,8 +6,18 @@
 <div class="grid grid-cols-8 w-full h-full w:md-2/3 mx-auto ">
         {{ include('shared/_form_nav.html.twig') }}
         <div class="col-span-6">
-        Posiadane pojazdy: 
-        {{ vehicles|length }}
+                <div class="">
+                        Posiadane pojazdy: 
+                        {{ vehicles|length }}
+                </div>
+                <div class="">
+                        Suma kosztów:
+                        {{ totalRepairs }}
+                </div>
+                <div class="">
+                        Najbliszy przegląd:
+                        {{ nextService|date('d-m-Y') }}
+                </div>
         
         </div>
 </div>

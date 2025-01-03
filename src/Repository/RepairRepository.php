@@ -35,6 +35,19 @@ class RepairRepository extends ServiceEntityRepository
         $entityManager->flush();
     }
 
+    public function getTotalRepairCost($user){
+        $query = $this->createQueryBuilder('r')
+            ->select('SUM(r.price)')
+            ->innerJoin('r.vehicle', 'v')
+            ->where('v.owner = :ownerId')
+            ->setParameter('ownerId', $user->getId())
+            ->getQuery();
+
+        $sum = $query->getSingleScalarResult();
+        // var_dump($sum);
+        return (float) $sum;
+    }
+
     //    /**
     //     * @return Repair[] Returns an array of Repair objects
     //     */

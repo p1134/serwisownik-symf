@@ -4,9 +4,15 @@
     <td>{{ vehicle.year }}</td>
     <td>{{ vehicle.numberPlate }}</td>
     <td>{{ vehicle.datePurchase }}</td>
-    <td>{{ vehicle.service | date('d-m-Y') }}</td>
+    <td>
+    {% if currentDate|date('d-m-Y') > vehicle.service|date('d-m-Y')  %}
+    <span class="block"><i class="fa-solid fa-triangle-exclamation text-red-900"></i></span>
+    {% endif %}
+    {{ vehicle.service | date('d-m-Y') }}
+    
+    </td>
     <td class="flex gap-3 justify-center">
         <a href="{{ path('app_vehicle_edit', {vehicle: vehicle.id}) }}"><i class="fa-solid fa-pen-to-square"></i></a>
-       <a href="{{ path('app_vehicle_remove', {vehicle: vehicle.id}) }}"><i class="fa-solid fa-trash"></i></a>
+       <a href="{{ path('app_vehicle_remove', {vehicle: vehicle.id}) }}" onclick="return confirm('Operacja usunięcia jest nieodwracalna')"><i class="fa-solid fa-trash"></i></a>
     </td>
 </tr>

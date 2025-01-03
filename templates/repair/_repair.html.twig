@@ -7,6 +7,6 @@
     <td class="flex flex-wrap">{{ repair.description }}</td>
     <td class="flex gap-3 justify-center">
         <a href="{{ path('app_repair_edit', {repair: repair.id}) }}"><i class="fa-solid fa-pen-to-square"></i></a>
-       <a href="{{ path('app_repair_remove', {repair: repair.id}) }}"><i class="fa-solid fa-trash"></i></a>
+       <a href="{{ path('app_repair_remove', {repair: repair.id}) }}" onclick="return confirm('Operacja usunięcia jest nieodwracalna')"><i class="fa-solid fa-trash"></i></a>
     </td>
 </tr>

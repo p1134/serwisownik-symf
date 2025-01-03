@@ -20,7 +20,7 @@
             </tr>
             {% if vehicles|length > 0 %}
                 {% for vehicle in vehicles %}
-                {{ include('vehicle/_vehicle.html.twig', {'vehicle': vehicle}) }}   
+                {{ include('vehicle/_vehicle.html.twig', {'vehicle': vehicle, 'currentDate': currentDate}) }}   
                 {% endfor %}
             {% endif %}
         </table>  

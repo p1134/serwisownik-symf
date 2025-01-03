@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use DateTime;
 use App\Entity\Vehicle;
 use App\Form\VehicleType;
 use App\Repository\VehicleRepository;
@@ -17,7 +18,8 @@ class VehicleController extends AbstractController
     public function addVehicle(Request $request, EntityManagerInterface $entityManager, VehicleRepository $vehicles): Response
     {
         $user = $this->getUser();
-
+        $now = new DateTime('now');
+        
         $form = $this->createForm(VehicleType::class, new Vehicle());
 
         $form->handleRequest($request);
@@ -41,7 +43,8 @@ class VehicleController extends AbstractController
             'form' => $form,
             'owner' => $owner,
             'vehicles' => $vehicles->findAllByOwner($user),
-            'form_type' => 'add'
+            'form_type' => 'add',
+            'currentDate' => $now,
         ]);
     }
 
