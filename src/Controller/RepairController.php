@@ -19,7 +19,11 @@ class RepairController extends AbstractController
     #[Route('/repair', name: 'app_repair')]
     public function add(Request $request, EntityManagerInterface $entityManager, RepairRepository $repairs): Response
     {
-        $form = $this->createForm(RepairType::class, new Repair());
+        $user = $this->getUser();
+
+        $form = $this->createForm(RepairType::class, new Repair(), [
+            'user' => $user
+        ]);
 
         $form -> handleRequest($request);
 
@@ -37,13 +41,16 @@ class RepairController extends AbstractController
         return $this->render('repair/index.html.twig', [
             'controller_name' => 'RepairController',
             'form' => $form,
-            'repairs' => $repairs->findAllByVehicle(),
+            'repairs' => $repairs->findAllByVehicle($user),
             'form_type' => 'add'
         ]);
     }
 
     #[Route('/repair/{repair}/edit', name: 'app_repair_edit')]
     public function editRepair(Request $request, EntityManagerInterface $entityManager, RepairRepository $repairs, Repair $repair): Response{
+        
+        $user = $this->getUser();
+
         $form = $this->createForm(RepairType::class, $repair);
         $form->handleRequest($request);
 
@@ -61,7 +68,7 @@ class RepairController extends AbstractController
 
         return $this->render('repair/index.html.twig', [
             'form' => $form,
-            'repairs' => $repairs->findAllByVehicle(),
+            'repairs' => $repairs->findAllByVehicle($user),
             'repair' => $repair,
             'form_type' => 'edit'
         ]);

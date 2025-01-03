@@ -16,10 +16,14 @@ class RepairRepository extends ServiceEntityRepository
         parent::__construct($registry, Repair::class);
     }
 
-    public function findAllByVehicle(): array{
+    public function findAllByVehicle($user): array{
         $query = $this->createQueryBuilder('r')
             ->leftJoin('r.vehicle', 'v')
             ->addSelect('v')
+            ->leftJoin('v.owner', 'o')
+            ->addSelect('o')
+            ->where('v.owner = :ownerId')
+            ->setParameter('ownerId', $user->getId())
             ->getQuery();
 
         return $query->getResult();

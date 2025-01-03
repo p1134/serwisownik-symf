@@ -16,11 +16,15 @@ class VehicleController extends AbstractController
     #[Route('/vehicle', name: 'app_vehicle')]
     public function addVehicle(Request $request, EntityManagerInterface $entityManager, VehicleRepository $vehicles): Response
     {
+        $user = $this->getUser();
+
         $form = $this->createForm(VehicleType::class, new Vehicle());
 
         $form->handleRequest($request);
 
+        $owner = $this->getUser();
         if($form ->isSubmitted() && $form->isValid()){
+
             $vehicle = $form->getData();
             $vehicle->setOwner($this->getUser());
     
@@ -35,7 +39,8 @@ class VehicleController extends AbstractController
 
         return $this->render('vehicle/index.html.twig', [
             'form' => $form,
-            'vehicles' => $vehicles->findAllByOwner(),
+            'owner' => $owner,
+            'vehicles' => $vehicles->findAllByOwner($user),
             'form_type' => 'add'
         ]);
     }
@@ -43,6 +48,8 @@ class VehicleController extends AbstractController
     #[Route('/vehicle/{vehicle}/edit', name: 'app_vehicle_edit')]
     public function editVehicle(Request $request, EntityManagerInterface $entityManager, Vehicle $vehicle, VehicleRepository $vehicles): Response
     {
+        $user = $this->getUser();
+
         $form = $this->createForm(VehicleType::class, $vehicle);
 
         $form->handleRequest($request);
@@ -62,7 +69,7 @@ class VehicleController extends AbstractController
         return $this->render('vehicle/index.html.twig', [
             'form' => $form->createView(),
             'vehicle' => $vehicle,
-            'vehicles' => $vehicles->findAllByOwner(),
+            'vehicles' => $vehicles->findAllByOwner($user),
             'form_type' => 'edit',
         ]);
     }

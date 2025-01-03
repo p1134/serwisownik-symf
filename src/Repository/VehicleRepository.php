@@ -19,10 +19,12 @@ class VehicleRepository extends ServiceEntityRepository
     }
 
 
-    public function findAllByOwner():array{
+    public function findAllByOwner($user):array{
         $query = $this->createQueryBuilder('v')
             ->leftJoin('v.owner', 'o')
             ->addSelect('o')
+            ->where('o.id = :ownerId')
+            ->setParameter('ownerId', $user->getId())
             ->getQuery();
 
         return $query->getResult();
@@ -34,6 +36,8 @@ class VehicleRepository extends ServiceEntityRepository
        $entityManager ->remove($vehicle);
         $entityManager->flush();
     }
+
+    
     //    /**
     //     * @return Vehicle[] Returns an array of Vehicle objects
     //     */
