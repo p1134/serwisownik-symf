@@ -33,7 +33,6 @@ class VehicleType extends AbstractType
             ])
             ->add('service', DateType::class, [
                 'widget' => 'single_text',
-                'data' => new \DateTime('now'),
             ])
         ;
     }

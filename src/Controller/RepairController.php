@@ -51,7 +51,9 @@ class RepairController extends AbstractController
         
         $user = $this->getUser();
 
-        $form = $this->createForm(RepairType::class, $repair);
+        $form = $this->createForm(RepairType::class, $repair, [
+            'user' => $user,
+        ]);
         $form->handleRequest($request);
 
         if($form->isSubmitted() && $form->isValid()){

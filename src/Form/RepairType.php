@@ -23,7 +23,7 @@ class RepairType extends AbstractType
                 'choice_label' => function(Vehicle $vehicle){
                     return $vehicle->getBrand().' '.$vehicle->getModel().' | '.$vehicle->getNumberPlate();
                 },
-                'placeholder' => 'Wybierz pojazd',
+                // 'placeholder' => 'Wybierz pojazd',
                 'query_builder' => function(EntityRepository $repository) use ($user){
                     return $repository->createQueryBuilder('v')
                     ->where('v.owner = :ownerId')
@@ -34,7 +34,7 @@ class RepairType extends AbstractType
             ->add('price')
             ->add('dateRepair', null, [
                 'widget' => 'single_text',
-                'data' => new \DateTime('now')
+                // 'data' => new \DateTime('now')
             ])
             ->add('description')
         ;

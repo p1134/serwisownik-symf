@@ -52,6 +52,7 @@ class VehicleController extends AbstractController
     public function editVehicle(Request $request, EntityManagerInterface $entityManager, Vehicle $vehicle, VehicleRepository $vehicles): Response
     {
         $user = $this->getUser();
+        $now = new DateTime('now');
 
         $form = $this->createForm(VehicleType::class, $vehicle);
 
@@ -74,6 +75,7 @@ class VehicleController extends AbstractController
             'vehicle' => $vehicle,
             'vehicles' => $vehicles->findAllByOwner($user),
             'form_type' => 'edit',
+            'currentDate' => $now,
         ]);
     }
 
