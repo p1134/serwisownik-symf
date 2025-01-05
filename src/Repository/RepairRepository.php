@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Entity\Repair;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -16,18 +17,59 @@ class RepairRepository extends ServiceEntityRepository
         parent::__construct($registry, Repair::class);
     }
 
+    public function findAllQuery(
+        bool $withId = false,
+        bool $withVehicle = false,
+        bool $withPart = false,
+        bool $withPrice = false,
+        bool $withDateRepair = false,
+        bool $withDescription = false,
+    ):QueryBuilder{
+        $query = $this->createQueryBuilder('r');
+        
+        if($withId){
+            $query->addSelect('r.id');
+        }
+        if($withVehicle){
+            $query->leftJoin('r.vehicle', 'v')
+                ->addSelect('v');
+        }
+        if($withPart){
+            $query->addSelect('r.part');
+        }
+        if($withPrice){
+            $query->addSelect('r.price');
+        }
+        if($withDateRepair){
+            $query->addSelect('r.dateRepair');
+        }
+        if($withDescription){
+            $query->addSelect('r.description');
+        }
+
+        return $query;
+    }
+
     public function findAllByVehicle($user): array{
-        $query = $this->createQueryBuilder('r')
-            ->leftJoin('r.vehicle', 'v')
-            ->addSelect('v')
-            ->leftJoin('v.owner', 'o')
-            ->addSelect('o')
+        return $this->findAllQuery(withVehicle: true)
             ->where('v.owner = :ownerId')
             ->setParameter('ownerId', $user->getId())
-            ->getQuery();
-
-        return $query->getResult();
+            ->getQuery()
+            ->getResult();
     }
+
+    // public function findAllByVehicle($user): array{
+    //     $query = $this->createQueryBuilder('r')
+    //         ->leftJoin('r.vehicle', 'v')
+    //         ->addSelect('v')
+    //         ->leftJoin('v.owner', 'o')
+    //         ->addSelect('o')
+    //         ->where('v.owner = :ownerId')
+    //         ->setParameter('ownerId', $user->getId())
+    //         ->getQuery();
+
+    //     return $query->getResult();
+    // }
 
     public function deleteRepair(Repair $repair){
         $entityManager = $this->getEntityManager();
@@ -36,17 +78,26 @@ class RepairRepository extends ServiceEntityRepository
     }
 
     public function getTotalRepairCost($user){
-        $query = $this->createQueryBuilder('r')
+        return $this->findAllQuery(withVehicle: true, withPrice: true)
             ->select('SUM(r.price)')
-            ->innerJoin('r.vehicle', 'v')
             ->where('v.owner = :ownerId')
             ->setParameter('ownerId', $user->getId())
-            ->getQuery();
-
-        $sum = $query->getSingleScalarResult();
-        // var_dump($sum);
-        return (float) $sum;
+            ->getQuery()
+            ->getSingleScalarResult();
     }
+
+    // public function getTotalRepairCost($user){
+    //     $query = $this->createQueryBuilder('r')
+    //         ->select('SUM(r.price)')
+    //         ->innerJoin('r.vehicle', 'v')
+    //         ->where('v.owner = :ownerId')
+    //         ->setParameter('ownerId', $user->getId())
+    //         ->getQuery();
+
+    //     $sum = $query->getSingleScalarResult();
+    //     // var_dump($sum);
+    //     return (float) $sum;
+    // }
 
     //    /**
     //     * @return Repair[] Returns an array of Repair objects

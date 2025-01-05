@@ -21,11 +21,19 @@ class HomeController extends AbstractController
         $user = $this->getUser();
         $date = new DateTime('now');
         $now = $date->format('Y-m-d');
+        $numberOfRepairs = 0;
+        $lastVehicle = $vehicles->lastAddedVehicle($user);
+        $oldestVehicle = $vehicles->oldestVehicle($user);
+
         return $this->render('home/index.html.twig', [
             'controller_name' => 'HomeController',
             'vehicles' => $vehicles->findAllByOwner($user),
             'totalRepairs' => $repairs->getTotalRepairCost($user),
-            'nextService' => $vehicles->nextService($user, $now)
+            'nextService' => $vehicles->nextService($user, $now),
+            'lastVehicle' => $lastVehicle[0] ?? null,
+            'oldestVehicle' => $oldestVehicle[0] ?? null,
+            'repairs' => $repairs->findAllByVehicle($user),
+            'numberOfRepairs' => $numberOfRepairs,
         ]);
 
     }
