@@ -50,12 +50,39 @@ class RepairRepository extends ServiceEntityRepository
         return $query;
     }
 
-    public function findAllByVehicle($user): array{
+    public function findAllByVehicle($user): QueryBuilder{
         return $this->findAllQuery(withVehicle: true)
             ->where('v.owner = :ownerId')
-            ->setParameter('ownerId', $user->getId())
-            ->getQuery()
-            ->getResult();
+            ->setParameter('ownerId', $user->getId());
+    }
+
+    public function findAllBySort($user, $sort){
+        $query = $this->findAllByVehicle($user);
+
+        switch($sort){
+            case 'alphabetASC':
+                $query->orderBy('v.brand', 'ASC');
+                break;
+            case 'alphabetDESC':
+                $query->orderBy('v.brand', 'DESC');
+                break;
+            case 'dateRepairASC':
+                $query->orderBy('r.dateRepair', 'ASC');
+                break;
+            case 'dateRepairDESC':
+                $query->orderBy('r.dateRepair', 'DESC');
+                break;
+            case 'priceASC':
+                $query->orderBy('r.price', 'ASC');
+                break;
+            case 'priceDESC':
+                $query->orderBy('r.price', 'DESC');
+                break;
+            default:
+                $query->getQuery()->getResult();
+                break;
+        }
+        return $query->getQuery()->getResult();
     }
 
     // public function findAllByVehicle($user): array{

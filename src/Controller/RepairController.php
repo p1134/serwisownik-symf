@@ -20,6 +20,7 @@ class RepairController extends AbstractController
     public function add(Request $request, EntityManagerInterface $entityManager, RepairRepository $repairs): Response
     {
         $user = $this->getUser();
+        $sort = $request->query->get('sort');
 
         $form = $this->createForm(RepairType::class, new Repair(), [
             'user' => $user
@@ -42,8 +43,10 @@ class RepairController extends AbstractController
         return $this->render('repair/index.html.twig', [
             'controller_name' => 'RepairController',
             'form' => $form,
-            'repairs' => $repairs->findAllByVehicle($user),
-            'form_type' => 'add'
+            'repairs' => $repairs->findAllBySort($user, $sort),
+            'form_type' => 'add',
+            'sort' => $sort,
+            'data_sort' => 'repair',
         ]);
     }
 
@@ -51,6 +54,7 @@ class RepairController extends AbstractController
     public function editRepair(Request $request, EntityManagerInterface $entityManager, RepairRepository $repairs, Repair $repair): Response{
         
         $user = $this->getUser();
+        $sort = $request->query->get('sort');
 
         $form = $this->createForm(RepairType::class, $repair, [
             'user' => $user,
@@ -71,9 +75,12 @@ class RepairController extends AbstractController
 
         return $this->render('repair/index.html.twig', [
             'form' => $form,
-            'repairs' => $repairs->findAllByVehicle($user),
+            'repairs' => $repairs->findAllBySort($user, $sort),
             'repair' => $repair,
-            'form_type' => 'edit'
+            'form_type' => 'edit',
+            'sort' => $sort,
+            'data_sort' => 'repair',
+            'user' => $user,
         ]);
     }
 

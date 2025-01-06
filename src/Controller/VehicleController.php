@@ -47,6 +47,7 @@ class VehicleController extends AbstractController
             'form_type' => 'add',
             'currentDate' => $now,
             'sort' =>$sort,
+            'data_sort' => 'vehicle',
         ]);
     }
 
@@ -55,6 +56,7 @@ class VehicleController extends AbstractController
     {
         $user = $this->getUser();
         $now = new DateTime('now');
+        $sort = $request->query->get('sort');
 
         $form = $this->createForm(VehicleType::class, $vehicle);
 
@@ -75,9 +77,11 @@ class VehicleController extends AbstractController
         return $this->render('vehicle/index.html.twig', [
             'form' => $form->createView(),
             'vehicle' => $vehicle,
-            'vehicles' => $vehicles->findAllByOwner($user),
+            'vehicles' => $vehicles->findAllBySort($user, $sort),
             'form_type' => 'edit',
             'currentDate' => $now,
+            'sort' => $sort,
+            'data_sort' => 'vehicle',
         ]);
     }
 
