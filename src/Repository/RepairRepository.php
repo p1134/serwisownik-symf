@@ -86,6 +86,38 @@ class RepairRepository extends ServiceEntityRepository
             ->getSingleScalarResult();
     }
 
+    public function mostRepairs($user){
+        return $this->findAllQuery(withVehicle: true)
+            ->select('COUNT(r.vehicle) AS count')
+            ->where('v.owner = :ownerId')
+            ->setParameter('ownerId', $user->getId())
+            ->addSelect('v.brand')
+            ->addSelect('v.model')
+            ->addSelect('v.numberPlate')
+            ->groupBy('r.vehicle')
+            ->orderBy('count', 'DESC')
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getOneOrNullResult();
+    }
+
+    public function newestRepair($user){
+        return $this->findAllQuery(
+            withId: true,
+            withVehicle: true,
+            withPrice: true,
+            withPart: true,
+            withDateRepair: true
+        )
+            ->where('v.owner = :ownerId')
+            ->setParameter('ownerId', $user->getId())
+            ->orderBy('r.id', 'DESC')
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getOneOrNullResult();
+    }
+
+
     // public function getTotalRepairCost($user){
     //     $query = $this->createQueryBuilder('r')
     //         ->select('SUM(r.price)')

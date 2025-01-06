@@ -29,6 +29,7 @@ class RepairController extends AbstractController
 
         if($form->isSubmitted() && $form->isValid()){
             $repair = $form->getData();
+            $repair->setUser($user);
 
             $entityManager->persist($repair);
             $entityManager->flush();

@@ -34,6 +34,8 @@ class HomeController extends AbstractController
             'oldestVehicle' => $oldestVehicle[0] ?? null,
             'repairs' => $repairs->findAllByVehicle($user),
             'numberOfRepairs' => $numberOfRepairs,
+            'mostRepairs' => $repairs->mostRepairs($user),
+            'newestRepair' => $repairs->newestRepair($user),
         ]);
 
     }

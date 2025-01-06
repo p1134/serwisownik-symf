@@ -1,0 +1,14 @@
+<div class="w-full h-8 bg-blue-950 flex justify-end place-items-center">
+<form action="{{ path('app_vehicle') }}" method="GET">
+    <i class="fa-solid fa-sort text-gray-200 place-items-center mr-1"></i>
+    <select name="sort" id="sort" onchange="this.form.submit()" class="rounded-md border bg-gray-200 border-gray-300 text-sm h-5 mr-10">
+        <option {% if sort is empty %}selected{% endif %}>Domyślnie</option>
+        <option value="alphabetASC" {% if sort == 'alphabetASC' %}selected{% endif %}>Alfabetycznie rosnąco</option>
+        <option value="alphabetDESC" {% if sort == 'alphabetDESC' %}selected{% endif %}>Alfabetycznie malejąco</option>
+        <option value="serviceASC" {% if sort == 'serviceASC' %}selected{% endif %}>Przegląd rosnąco</option>
+        <option value="serviceDESC" {% if sort == 'serviceDESC' %}selected{% endif %}>Przegląd malejąco</option>
+        <option value="insuranceASC" {% if sort == 'insuranceASC' %}selected{% endif %}>Ubezpieczenie rosnąco</option>
+        <option value="insuranceDESC"{% if sort == 'insuranceDESC' %}selected{% endif %}>Ubezpieczenie malejąco</option>
+    </select>
+</form>
+</div>

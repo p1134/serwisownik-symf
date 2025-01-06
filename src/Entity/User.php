@@ -44,9 +44,16 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private bool $isVerified = false;
 
+    /**
+     * @var Collection<int, Repair>
+     */
+    #[ORM\OneToMany(targetEntity: Repair::class, mappedBy: 'user')]
+    private Collection $repair;
+
     public function __construct()
     {
         $this->vehicles = new ArrayCollection();
+        $this->repair = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -162,6 +169,36 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setVerified(bool $isVerified): static
     {
         $this->isVerified = $isVerified;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Repair>
+     */
+    public function getRepair(): Collection
+    {
+        return $this->repair;
+    }
+
+    public function addRepair(Repair $repair): static
+    {
+        if (!$this->repair->contains($repair)) {
+            $this->repair->add($repair);
+            $repair->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeRepair(Repair $repair): static
+    {
+        if ($this->repair->removeElement($repair)) {
+            // set the owning side to null (unless already changed)
+            if ($repair->getUser() === $this) {
+                $repair->setUser(null);
+            }
+        }
 
         return $this;
     }

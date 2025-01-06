@@ -29,6 +29,7 @@ class VehicleRepository extends ServiceEntityRepository
         bool $withNumberPlate = false,
         bool $withDatePurchase = false,
         bool $withService = false,
+        bool $withInsurance = false,
     ): QueryBuilder{
         $query = $this->createQueryBuilder('v');
 
@@ -57,16 +58,45 @@ class VehicleRepository extends ServiceEntityRepository
         if($withService){
                 $query->addSelect('v.service');
         }
+        if($withInsurance){
+                $query->addSelect('v.insurance');
+        }
 
         return $query;
     }
 
-    public function findAllByOwner($user):array{
+    public function findAllBySort($user, $sort){
+        $query = $this->findAllByOwner($user);
+        switch($sort){
+            case 'alphabetASC':
+                $query->orderBy('v.brand', 'ASC');
+                break;
+            case 'alphabetDESC':
+                $query->orderBy('v.brand', 'DESC');
+                break;
+            case 'serviceASC':
+                $query->orderBy('v.service', 'ASC');
+                break;
+            case 'serviceDESC':
+                $query->orderBy('v.service', 'DESC');
+                break;
+            case 'insuranceASC':
+                $query->orderBy('v.insurance', 'ASC');
+                break;
+            case 'insuranceDESC':
+                $query->orderBy('v.insurance', 'DESC');
+                break;
+            default:
+                $query->getQuery()->getResult();
+                break;
+        }
+        return $query->getQuery()->getResult();
+    }
+
+    public function findAllByOwner($user):QueryBuilder{
         return $this->findAllQuery(withOwner: true)
             ->where('v.owner = :ownerId')
-            ->setParameter('ownerId', $user->getId())
-            ->getQuery()
-            ->getResult();
+            ->setParameter('ownerId', $user->getId());
 
     }
 

@@ -34,6 +34,9 @@ class VehicleType extends AbstractType
             ->add('service', DateType::class, [
                 'widget' => 'single_text',
             ])
+            ->add('insurance', DateType::class, [
+                'widget' => 'single_text',
+            ])
         ;
     }
 

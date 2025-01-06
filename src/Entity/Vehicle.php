@@ -44,6 +44,9 @@ class Vehicle
     #[ORM\Column(type: Types::DATE_MUTABLE)]
     private ?\DateTimeInterface $service = null;
 
+    #[ORM\Column(type: Types::DATE_MUTABLE)]
+    private ?\DateTimeInterface $insurance = null;
+
     public function __construct()
     {
         $this->repairs = new ArrayCollection();
@@ -164,6 +167,18 @@ class Vehicle
     public function setService(\DateTimeInterface $service): static
     {
         $this->service = $service;
+
+        return $this;
+    }
+
+    public function getInsurance(): ?\DateTimeInterface
+    {
+        return $this->insurance;
+    }
+
+    public function setInsurance(\DateTimeInterface $insurance): static
+    {
+        $this->insurance = $insurance;
 
         return $this;
     }
