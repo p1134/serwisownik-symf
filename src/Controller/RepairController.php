@@ -3,21 +3,29 @@
 namespace App\Controller;
 
 
+use DateTime;
 use App\Entity\Repair;
 use App\Entity\Vehicle;
+use App\Form\FilterType;
 use App\Form\RepairType;
 use App\Repository\RepairRepository;
 use App\Repository\VehicleRepository;
+use App\Controller\RepairCrudController;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Filters;
+use EasyCorp\Bundle\EasyAdminBundle\Router\AdminUrlGenerator;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 
 class RepairController extends AbstractController
 {
+
     #[Route('/repair', name: 'app_repair')]
-    public function add(Request $request, EntityManagerInterface $entityManager, RepairRepository $repairs): Response
+    public function add(Request $request, EntityManagerInterface $entityManager, RepairRepository $repairs, VehicleRepository $vehicles): Response
     {
         $user = $this->getUser();
         $sort = $request->query->get('sort');
@@ -28,38 +36,50 @@ class RepairController extends AbstractController
 
         $form -> handleRequest($request);
 
-        if($form->isSubmitted() && $form->isValid()){
-            $repair = $form->getData();
-            $repair->setUser($user);
+        $filters = [];
+        $filters = $request->query->all('filter');
+        // dump($filters);
 
-            $entityManager->persist($repair);
+        if($form->isSubmitted() && $form->isValid()){
+            $repairs = $form->getData();
+            $repairs->setUser($user);
+
+            $entityManager->persist($repairs);
             $entityManager->flush();
 
             $this->addFlash('success', 'Naprawa została dodana');
             return $this->redirectToRoute('app_repair');
         }
 
+        
 
         return $this->render('repair/index.html.twig', [
-            'controller_name' => 'RepairController',
-            'form' => $form,
-            'repairs' => $repairs->findAllBySort($user, $sort),
+            'repairs' => $repairs->findAllBySort($user, $sort, $filters),
+            'user' => $user->getUserIdentifier(),
+            'form' => $form->createView(),
             'form_type' => 'add',
             'sort' => $sort,
-            'data_sort' => 'repair',
+            'data_sort' => 'repair' ?? null,
+            'vehicles' => $vehicles->findAllByOwner($user)->getQuery()->getResult(),
+            'filters' => $filters,
+
         ]);
+
     }
 
     #[Route('/repair/{repair}/edit', name: 'app_repair_edit')]
-    public function editRepair(Request $request, EntityManagerInterface $entityManager, RepairRepository $repairs, Repair $repair): Response{
+    public function editRepair(Request $request, EntityManagerInterface $entityManager, RepairRepository $repairs, Repair $repair, VehicleRepository $vehicles): Response{
         
         $user = $this->getUser();
         $sort = $request->query->get('sort');
-
+        
         $form = $this->createForm(RepairType::class, $repair, [
             'user' => $user,
         ]);
         $form->handleRequest($request);
+
+        $filters = [];
+        $filters = $request->query->all('filter');
 
         if($form->isSubmitted() && $form->isValid()){
 
@@ -75,12 +95,14 @@ class RepairController extends AbstractController
 
         return $this->render('repair/index.html.twig', [
             'form' => $form,
-            'repairs' => $repairs->findAllBySort($user, $sort),
+            'repairs' => $repairs->findAllBySort($user, $sort, $filters),
             'repair' => $repair,
             'form_type' => 'edit',
             'sort' => $sort,
-            'data_sort' => 'repair',
-            'user' => $user,
+            'data_sort' => 'repair' ?? null,
+            'user' => $user->getUserIdentifier(),
+            'vehicles' => $vehicles->findAllByOwner($user)->getQuery()->getResult(),
+            'filters' => $filters,
         ]);
     }
 

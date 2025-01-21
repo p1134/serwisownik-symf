@@ -1,0 +1,37 @@
+<form action="{{ path('app_repair') }}" method="GET" class="flex mr-1 place-items-center">
+<i class="fa-solid fa-filter text-gray-200 place-items-center mr-1 text-sm"></i>
+<div class="rounded-md border bg-gray-200 border-gray-300 text-sm h-5 pl-1 w-40">
+    <button type="button" onclick="toggleDropdown()" class="filter__dropdown text-sm absolute w-40 text-left">Filtruj</button>
+    <div class="hidden checkbox__dropdown-content flex flex-col h-auto w-40 p-2 text-white border-gray-400 border rounded-md relative top-5 gap-1">
+        <p>Status</p>
+        <div class="w-38 border border-gray-400"></div>
+        <label>
+            <input type="checkbox" name="filter[status][]" value="planned" class="planned mr-1" {% if 'planned' in (filters.status|default([])) %}checked{% endif %}>Oczekujące
+        </label>
+        <label>
+            <input type="checkbox" name="filter[status][]" value="in_progress" class="in_progress mr-1"{% if 'in_progress' in (filters.status|default([])) %}checked{% endif %}>W trakcie
+        </label>
+         <label>
+            <input type="checkbox" name="filter[status][]" value="done" class="done mr-1" {% if 'done' in (filters.status|default([])) %}checked{% endif %}>Zakończone
+        </label>
+        <p class="mt-2">Miesiąc</p>
+        <div class="w-38 border border-gray-400"></div>
+         <label>
+            <input type="checkbox" name="filter[month][]" value="currentMonth" class="mr-1" {% if 'currentMonth' in (filters.month|default([])) %}checked{% endif %}>Obecny
+        </label>
+         <label>
+            <input type="checkbox" name="filter[month][]" value="previousMonth" class="mr-1" {% if 'previousMonth' in (filters.month|default([])) %}checked{% endif %}>Poprzedni
+        </label>
+        <p class="mt-2">Pojazd</p>
+        <div class="w-38 border border-gray-400"></div>
+        {% if repairs|length > 0 %}
+        {% for vehicle in vehicles %}
+         <label class="flex">
+            <input type="checkbox" name="filter[vehicle][]" value="{{ vehicle.id }}" class="mr-1" {% if vehicle.id in (filters.vehicle|default([])) %}checked{% endif %}>{{ vehicle.brand }} {{ vehicle.model }} | {{ vehicle.numberPlate }}
+        </label>
+        {% endfor %}
+        {% endif %}
+        <button type="submit" class="bg-white text-black rounded-md mt-4">Filtruj</button>
+    </div>
+</div>
+</form>

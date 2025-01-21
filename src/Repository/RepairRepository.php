@@ -56,8 +56,36 @@ class RepairRepository extends ServiceEntityRepository
             ->setParameter('ownerId', $user->getId());
     }
 
-    public function findAllBySort($user, $sort){
+    public function findAllBySort($user, $sort, array $filters){
+        
         $query = $this->findAllByVehicle($user);
+        if(!empty($filters['status'])){
+            $query->andWhere('r.status IN (:statuses)')
+                ->setParameter('statuses', $filters['status']);
+        }
+        if(!empty($filters['month'])){
+            $now = new \DateTime('now');
+            if (in_array('currentMonth', $filters['month'])) {
+                $start = clone($now)->modify('first day of this month')->setTime(0, 0);
+                $end = clone($now)->modify('last day of this month')->setTime(23, 59);
+                
+                $query->andWhere('r.dateRepair BETWEEN :start AND :end ')
+                ->setParameter('start', $start)
+                ->setParameter('end', $end);
+            }
+            elseif (in_array('previousMonth', $filters['month'])) {
+                $start = clone($now)->modify('first day of previous month')->setTime(0, 0);
+                $end = clone($now)->modify('last day of this month')->setTime(23, 59);
+                
+                $query->andWhere('r.dateRepair BETWEEN :start AND :end ')
+                ->setParameter('start', $start)
+                ->setParameter('end', $end);
+            }
+        }
+        if(!empty($filters['vehicle'])){
+            $query->andWhere('r.vehicle IN (:vehicle)')
+                ->setParameter('vehicle', $filters['vehicle']);
+        }
 
         switch($sort){
             case 'alphabetASC':
@@ -85,18 +113,29 @@ class RepairRepository extends ServiceEntityRepository
         return $query->getQuery()->getResult();
     }
 
-    // public function findAllByVehicle($user): array{
-    //     $query = $this->createQueryBuilder('r')
-    //         ->leftJoin('r.vehicle', 'v')
-    //         ->addSelect('v')
-    //         ->leftJoin('v.owner', 'o')
-    //         ->addSelect('o')
-    //         ->where('v.owner = :ownerId')
-    //         ->setParameter('ownerId', $user->getId())
-    //         ->getQuery();
+    public function findAllByFilter($user, array $filters){
+        $query = $this->createQueryBuilder('r');
 
-    //     return $query->getResult();
-    // }
+        if(isset($filters['statusFilter'])){
+            $query->andWhere('r.status = :status')
+            ->setParameter('status', $filters['statusFilter']);
+        }
+
+        if(isset($filters['vehicleFilter'])){
+            $query->leftJoin('r.vehicle','v')
+            ->addselect( 'v')
+            ->where('v.onwer = :ownerId')
+            ->setParameter('ownerId', $user->getId());
+        }
+        if(isset($filters['dateRepairFilter'])){
+            $query->andWhere('r.dateRepair BETWEEN :start AND :end')
+            ->setParameter('start', $filters['dateRepair']['start'])
+            ->setParameter('end', $filters['dateRepair']['end']);
+        }
+
+        return $query->getQuery()->getResult();
+        
+    }
 
     public function deleteRepair(Repair $repair){
         $entityManager = $this->getEntityManager();
@@ -144,18 +183,6 @@ class RepairRepository extends ServiceEntityRepository
             ->getOneOrNullResult();
     }
 
-
-    // public function getTotalRepairCost($user){
-    //     $query = $this->createQueryBuilder('r')
-    //         ->select('SUM(r.price)')
-    //         ->innerJoin('r.vehicle', 'v')
-    //         ->where('v.owner = :ownerId')
-    //         ->setParameter('ownerId', $user->getId())
-    //         ->getQuery();
-
-    //     $sum = $query->getSingleScalarResult();
-    //     // var_dump($sum);
-    //     return (float) $sum;
     // }
 
     //    /**

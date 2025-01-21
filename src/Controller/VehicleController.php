@@ -47,7 +47,8 @@ class VehicleController extends AbstractController
             'form_type' => 'add',
             'currentDate' => $now,
             'sort' =>$sort,
-            'data_sort' => 'vehicle',
+            'data_sort' => 'vehicle' ?? null,
+            'user' => $user->getUserIdentifier(),
         ]);
     }
 
@@ -81,7 +82,8 @@ class VehicleController extends AbstractController
             'form_type' => 'edit',
             'currentDate' => $now,
             'sort' => $sort,
-            'data_sort' => 'vehicle',
+            'data_sort' => 'vehicle' ?? null,
+            'user' => $user->getUserIdentifier(),
         ]);
     }
 

@@ -29,6 +29,7 @@ class Vehicle
     private ?string $numberPlate = null;
 
     #[ORM\Column]
+    
     private ?int $datePurchase = null;
 
     /**

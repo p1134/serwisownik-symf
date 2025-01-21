@@ -101,7 +101,7 @@ class VehicleRepository extends ServiceEntityRepository
     }
 
     public function nextService($user, $now){
-            return $this->findAllQuery(withOwner: true, withService: true)
+            $query = $this->findAllQuery(withOwner: true, withService: true)
                 ->select('MIN(v.service) AS min_service')
                 ->where('v.owner = :ownerId')
                 ->setParameter('ownerId', $user->getId())
@@ -109,20 +109,10 @@ class VehicleRepository extends ServiceEntityRepository
                 ->setParameter('now', $now)
                 ->getQuery()
                 ->getSingleScalarResult();
+            
+            return $query ?: null;
     }
 
-
-    // public function findAllByOwner($user):array{
-    //     $query = $this->createQueryBuilder('v')
-    //         ->leftJoin('v.owner', 'o')
-    //         ->addSelect('o')
-    //         ->where('o.id = :ownerId')
-    //         ->setParameter('ownerId', $user->getId())
-    //         ->getQuery();
-
-    //     return $query->getResult();
-
-    // }
 
     public function deleteVehicle(Vehicle $vehicle){
         $entityManager = $this->getEntityManager();
@@ -162,22 +152,7 @@ class VehicleRepository extends ServiceEntityRepository
         ->getResult();
     }
 
-    // public function nextService($user, $now){
-    //     $query = $this->createQueryBuilder('v')
-    //         ->leftJoin('v.owner', 'o')
-    //         ->addSelect('o')
-    //         ->where('v.owner = :ownerId')
-    //         ->setParameter('ownerId', $user->getId())
-    //         ->select('MIN(v.service) as min_service')
-    //         ->andWhere('v.service >= :now')
-    //         ->setParameter('now', $now)
-    //         ->getQuery();
-        
-    //         // var_dump($query->getResult());
-    //         // var_dump($now);
-    //     return $query->getSingleScalarResult();
-            
-    // }
+
 
     
     //    /**

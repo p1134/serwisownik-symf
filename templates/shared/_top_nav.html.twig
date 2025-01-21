@@ -1,8 +1,9 @@
-<div class="w-full h-8 bg-blue-950 flex justify-end place-items-center">
+<div class="w-full h-8 bg-blue-950 flex justify-end place-items-center gap-12">
 {% if data_sort == 'vehicle' %}
     {{ include('vehicle/_sort.html.twig') }}
 {% endif %}
 {% if data_sort == 'repair' %}
+    {{ include('repair/_filtering.html.twig') }}
     {{ include('repair/_sort.html.twig') }}
 {% endif %}
 </div>

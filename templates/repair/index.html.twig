@@ -1,7 +1,5 @@
 {% extends 'base.html.twig' %}
 
-{# {% block title %}Hello HomeController!{% endblock %} #}
-
 {% block body %}
 <div class="grid grid-cols-8 w-full h-full w:md-2/3 mx-auto ">
         {{ include('shared/_form_nav.html.twig') }}
@@ -9,21 +7,23 @@
     <div class="col-span-6 grid grid-rows-7 w-full">
         <div class="row-span-4 col-span-6">
         {{ include('shared/_top_nav.html.twig') }}
+        {% set url = ea_url()
+        .setController('App\\Controller\\Admin\\ProductCrudController')
+        .setAction('repair') %}
         <table class="w-full">
-            <tr class="grid grid-cols-7">
+            <tr class="grid grid-cols-8">
                 <th>Nr</th>
                 <th>Pojazd</th>
-                <th>Serwisowana część</th>
+                <th>Serwis</th>
                 <th>Koszt</th>
                 <th>Data</th>
-                <th>Opis</th>
+                <th>Status</th>
+                <th>Notatka</th>
                 <th>Akcja</th>
             </tr>
-            {% if repairs|length > 0 %}
-                {% for repair in repairs %}
-                    {{ include('repair/_repair.html.twig', { 'repair': repair }) }}
-                {% endfor %}
-            {% endif %}
+            {% for repair in repairs %}
+                            {{ include('repair/_repair.html.twig', { 'repair': repair, 'filters': filters }) }}
+            {% endfor %}
         </table>  
         </div>
         {% if form_type == 'edit' %}

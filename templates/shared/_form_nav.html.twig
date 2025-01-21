@@ -8,8 +8,8 @@
         <a href="{{ path('app_vehicle') }}"><button class="bg-gray-300 w-full pr-8 pl-8 pt-2 pb-2 rounded-md text-xl border font-semibold border-gray-500 font-mono"><i class="fa-solid fa-car-rear"></i> Pojazdy</button></a>
         <a href="{{ path('app_repair') }}"><button class="bg-gray-300 w-full pr-8 pl-8 pt-2 pb-2 rounded-md text-xl border font-semibold border-gray-500 font-mono"><i class="fa-solid fa-wrench"></i> Serwis</button></a>
     </div>
-        <div class="w-full flex text-gray-300 text-3xl justify-between bottom-5">
-            <a href=""><i class="fa-solid fa-user ml-10"></i></a>
+        <div class="w-full flex text-gray-300 text-3xl justify-between bottom-5 place-items-center">
+            <a href="{{ path('app_profile') }}" class="place-items-center flex"><i class="fa-solid fa-user ml-10"></i><span class="text-sm font-mono ml-3">{{ user }}</span></a>
             <a href="{{ path('app_logout') }}"><i class="fa-solid fa-arrow-right-from-bracket mr-10"></i></a>
         </div>
 </div>

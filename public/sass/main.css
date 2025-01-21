@@ -6,6 +6,10 @@
   transition: transform 0.3s;
 }
 
+.custom-widget {
+  color: lightgray;
+}
+
 .custom-widget:-moz-placeholder-shown ~ .custom-label {
   transform: translateY(0);
   background-color: transparent;
@@ -29,4 +33,12 @@
 .custom-widget:focus ~ .custom-label {
   transform: translateY(-80%);
   background-color: #172554;
+}
+
+.hidden {
+  display: none;
+}
+
+.checkbox__dropdown-content {
+  background-color: #666967;
 }/*# sourceMappingURL=main.css.map */
