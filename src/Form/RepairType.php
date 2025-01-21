@@ -35,13 +35,13 @@ class RepairType extends AbstractType
             ->add('price')
             ->add('dateRepair', null, [
                 'widget' => 'single_text',
-                // 'data' => new \DateTime('now')
+                'data' => new \DateTime('now'),
             ])
             ->add('status', ChoiceType::class, [
                 'choices' => [
-                    'Oczekujące' => 'Oczekujące',
-                    'W trakcie' => 'W trakcie',
-                    'Zakończone' => 'Zakończone',
+                    'Oczekujące' => 'planned',
+                    'W trakcie' => 'in_progress',
+                    'Zakończone' => 'done',
                 ],
                 'placeholder' => 'Wybierz',
             ])

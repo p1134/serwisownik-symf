@@ -5,8 +5,8 @@
 {% block body %}
 <div class="w-full h-screen bg-blue-950 flex flex-col justify-center place-items-center text-white font-mono">
 
-    {% for flash_error in app.flashes('app_login') %}
-        <div class="alert alert-danger" role="alert">{{ flash_error }}</div>
+    {% for flash_error in app.flashes('error') %}
+        <div class="alert alert-danger w-1/3 bg-red-300 border-red-950 text-red-900 rounded-md p-1 text-center mb-10" role="alert">{{ flash_error }}</div>
     {% endfor %}
 
     <form action="{{ path('app_login') }}" method="POST">
@@ -16,7 +16,6 @@
 
             <h1 class="text-4xl font-semibold">Logowanie</h1>
 
-            {{ error }}
             <div class="relative">
                 <input type="text" name="_username" id="_username" class = "custom-widget flex bg-transparent border-2 border-white rounded-md p-1 pl-3 pr-3" placeholder>
                 <label class="custom-label" for="_username">Email</label>
