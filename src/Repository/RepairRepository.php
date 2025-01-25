@@ -253,6 +253,19 @@ class RepairRepository extends ServiceEntityRepository
             ->getSingleScalarResult();
     }
 
+    public function getRepairsByVehicle($user){
+        $query = $this->findAllQuery(withVehicle: true, withPrice: true)
+            ->leftJoin('r.vehicle', 'vehicle')
+            ->select('SUM(r.price) AS Sum')
+            ->addSelect('CONCAT(vehicle.brand, \' \', vehicle.model, \' | \', vehicle.numberPlate) AS Vehicle')
+            ->where('v.owner = :ownerId')
+            ->setParameter('ownerId', $user->getId())
+            ->groupBy('Vehicle')
+            ->getQuery()
+            ->getResult();
+        return $query;
+    }
+
     public function mostRepairs($user){
         return $this->findAllQuery(withVehicle: true)
             ->select('COUNT(r.vehicle) AS count')

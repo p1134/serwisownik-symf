@@ -30,7 +30,7 @@ class HomeController extends AbstractController
         $lastVehicle = $vehicles->lastAddedVehicle($user);
         $oldestVehicle = $vehicles->oldestVehicle($user);
 
-        //Chart
+        //Chart sum by month
         $chart = $chartBuilder->createChart(Chart::TYPE_LINE);
         $repairsSum = $repairs->repairChart($user);
 
@@ -149,7 +149,7 @@ class HomeController extends AbstractController
 
 
         //
-        
+        //Calendar events
         $nextServiceCount = date_diff( date_create($vehicles->nextService($user, $now)), date_create($now), );
         $nextServiceCountM = $nextServiceCount->m;
         $nextServiceCountD = $nextServiceCount->d;
@@ -157,7 +157,76 @@ class HomeController extends AbstractController
         $nextInsuranceCount = date_diff( date_create($vehicles->nextInsurance($user, $now)), date_create($now), );
         $nextInsuranceCountM = $nextInsuranceCount->m;
         $nextInsuranceCountD = $nextInsuranceCount->d;
+        //
 
+        //Chart sum by vehicle
+        $chartSBV = $chartBuilder->createChart(CHART::TYPE_DOUGHNUT);
+        $repairsSBV = $repairs->getRepairsByVehicle($user);
+
+        $repairsSBVArray = [];
+        foreach($repairsSBV as $item){
+            $repairsSBVArray[$item['Vehicle']] = $item['Sum'];
+        }
+
+        $SBVDataVehicles = array_keys($repairsSBVArray);
+        $SBVDataSum = array_map('intval', array_values($repairsSBVArray));
+
+        function getRandomColor() {
+            $randomColor = sprintf('#%06X', mt_rand(390, 499)); // Losuje liczbę z zakresu 0 do 16777215 i konwertuje na HEX
+            return $randomColor;
+        }
+        $colorsArray = [
+            '#FF6F61', '#4682B4', '#D3A125', '#6B8E23', '#9B59B6', '#FF6347',
+            '#2E8B57', '#FFD700', '#9ACD32', '#E9967A', '#6495ED', '#A52A2A',
+            '#20B2AA', '#D2691E', '#FF4500', '#DC143C', '#32CD32', '#8A2BE2',
+            '#8B4513', '#FF1493'
+        ];
+        // for ($i = 1; $i <= count($SBVDataVehicles); $i++){
+        //     $colorsArray[] = getRandomColor();
+        // }
+        // dd($colorsArray);
+
+
+        $chartSBV->setData([
+            'labels' => $SBVDataVehicles,
+            'datasets' => [
+                [
+                    'backgroundColor' => $colorsArray,
+                    'borderColor' => 'transparent',
+                    'data' => $SBVDataSum,
+                ],
+            ],
+        ]);
+
+        $chartSBV->setOptions([
+            'maintainAspectRatio' => false,
+            'plugins' => [
+                'legend' => [
+                    'position' => 'left',
+                    'title' => [
+                        'display' => true,
+                        'text' => 'Wydatki wg pojazdów',
+                        'color' => 'white',
+                        'font' => [
+                            'size' => 20,
+                            'weight' => 200,
+                        ],
+                        'padding' => [
+                            'bottom' => 15,
+                        ]
+                    ],
+                    'labels' => [
+                        'color' => 'white',
+                        'font' => [
+                            'size' => 14,
+                            'weight' => 200,
+                        ]
+                    ]
+                ]
+                    ],
+        ]);
+
+        //
 
         return $this->render('home/index.html.twig', [
             'controller_name' => 'HomeController',
@@ -183,6 +252,7 @@ class HomeController extends AbstractController
             'decreaseCost' => $decreaseCost,
             'nothing' => $nothing,
             'nothingCost' => $nothingCost,
+            'chartSBV' => $chartSBV,
         ]);
 
     }

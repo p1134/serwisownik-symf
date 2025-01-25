@@ -135,9 +135,11 @@
                         {{ render_chart(chart) }}
                         </div>
                 </div>
-                <div class="bottom ring-1 ring-gray-700 flex place-items-center justify-center">
-                        <div class="bottom__left"></div>
-                        <div class="bottom__right"></div>
+                <div class="bottom flex place-items-center justify-center gap-5">
+                        <div class="bottom__box ring-1 ring-gray-700 w-2/5 h-full p-4">
+                        {{ render_chart(chartSBV) }}
+                        </div>
+                        <div class="bottom__box ring-1 ring-gray-700 w-3/5 h-full"></div>
                 </div>
 
                         {# {{ render_chart(chart) }} #}
