@@ -29,3 +29,104 @@
 .checkbox__dropdown-content{
     background-color: #666967;
 }
+
+.nav__menu{
+    background-color: #202B39;
+}
+
+.background{
+    background-color: #1B2431;
+}
+
+.menu__profile{
+    width: 40px;
+    height: 40px;
+    border-radius: 30%;
+    background-color: #121D2C;
+}
+
+.menu__button{
+    width: 40px;
+    height: 40px;
+    border-radius: 30%;
+    background-color: #205ba771;
+}
+
+.top{
+    width: 100%;
+    &__box{
+        position: relative;
+        width: 18em;
+        height: 10em;
+        border-radius: 1em;
+        background-color: #202B39;
+
+        &-text{
+            position: absolute;
+            top: 1em;
+            left: 3em;
+            text-align: center;
+            &--name{
+                color: white;
+                font-size: 1.5rem;
+                font-weight: 200;
+            }
+            &--number{
+                color: white;
+                font-size: 3rem;
+            }
+        }
+        &-icon{
+            position: absolute;
+            top: 1em;
+            right: 1em;
+            width: 3em;
+            height: 3em;
+            align-content: center;
+            text-align: center;
+            color: white;
+            border-radius: 1em;
+        }
+        &-bottom{
+            position: absolute;
+            bottom: 1em;
+            left: 2em;
+            color: lightgray;
+            i{
+                margin-right: 0.5em;
+                font-size: 1rem;
+            }
+            span{
+
+                font-size: 0.9rem;
+                font-weight: 300;
+            }
+        }
+    }
+    &__vehicles{
+        background-color: #BB9631;
+    }
+    &__repairs{
+        background-color: #60278B;
+    }
+    &__costs{
+        background-color: #278B2A;
+    }
+    &__calendar{
+        background-color: #8B274C;
+    }
+}
+
+.middle{
+    width: 100%;
+    height: 15em;
+    border-radius: 1em;
+    background-color: #202B39;
+}
+
+.bottom{
+    width: 100%;
+    height: 13em;
+    border-radius: 1em;
+    background-color: #202B39;
+}

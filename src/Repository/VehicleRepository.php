@@ -112,6 +112,18 @@ class VehicleRepository extends ServiceEntityRepository
             
             return $query ?: null;
     }
+    public function nextInsurance($user, $now){
+            $query = $this->findAllQuery(withOwner: true, withService: true)
+                ->select('MIN(v.insurance) AS min_insurance')
+                ->where('v.owner = :ownerId')
+                ->setParameter('ownerId', $user->getId())
+                ->andWhere('v.insurance >= :now')
+                ->setParameter('now', $now)
+                ->getQuery()
+                ->getSingleScalarResult();
+            
+            return $query ?: null;
+    }
 
 
     public function deleteVehicle(Vehicle $vehicle){

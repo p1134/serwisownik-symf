@@ -23,6 +23,7 @@ class RepairRepository extends ServiceEntityRepository
         bool $withPart = false,
         bool $withPrice = false,
         bool $withDateRepair = false,
+        bool $withStatus = false,
         bool $withDescription = false,
     ):QueryBuilder{
         $query = $this->createQueryBuilder('r');
@@ -42,6 +43,9 @@ class RepairRepository extends ServiceEntityRepository
         }
         if($withDateRepair){
             $query->addSelect('r.dateRepair');
+        }
+        if($withStatus){
+            $query->addSelect('r.status');
         }
         if($withDescription){
             $query->addSelect('r.description');
@@ -135,6 +139,103 @@ class RepairRepository extends ServiceEntityRepository
 
         return $query->getQuery()->getResult();
         
+    }
+
+    public function repairChart($user){
+        $now = new \DateTime('now');
+        $year = $now->format('Y');
+
+        $query = $this->findAllQuery(withVehicle: true, withPrice: true, withDateRepair: true)
+            ->where('v.owner = :ownerId')
+            ->setParameter('ownerId', $user->getId())
+            ->select('MONTH(r.dateRepair) as Month', 'SUM(r.price) as Sum')
+            ->andWhere("DATE_FORMAT(r.dateRepair, '%Y') = :year")
+            ->setParameter('year', $year)
+            ->groupBy('Month')
+            ->getQuery();
+        return $query->getArrayResult();
+    }
+
+    public function currentMonth($user){
+        $now = new \DateTime('now');
+        $currentStart = clone($now)->modify('first day of this month')->setTime(0, 0);
+        $currentEnd = clone($now)->modify('last day of this month')->setTime(23, 59);
+        
+        $currentMonth = $this->findAllQuery(withPrice: true, withDateRepair: true, withVehicle:true)
+        ->where('v.owner = :ownerId')
+        ->setParameter('ownerId', $user->getId())
+        ->andWhere('r.dateRepair BETWEEN :start AND :end')
+        ->setParameter('start', $currentStart)
+        ->setParameter('end', $currentEnd);
+        
+
+        return $currentMonth;
+    }
+
+    public function previousMonth($user){
+        $now = new \DateTime('now');
+        $previousStart = clone($now)->modify('first day of previous month')->setTime(0, 0);
+        $previousEnd = clone($now)->modify('last day of this month')->setTime(23, 59);
+
+        $previousMonth = $this->findAllQuery(withPrice: true, withDateRepair: true, withVehicle: true)
+        ->where ('v.owner = :ownerId')
+        ->setParameter('ownerId', $user->getId())
+        // ->addSelect('r.dateRepair as Month')
+        ->andWhere('r.dateRepair BETWEEN :start AND :end')
+        ->setParameter('start', $previousStart)
+        ->setParameter('end', $previousEnd);
+        // ->groupBy('Month');
+
+        return $previousMonth;
+    }
+
+    public function CVPRepairs($user){
+        // $currentMonth = $this->currentMonth($user);
+            $currentMonth = $this->currentMonth($user)
+                ->select('COUNT(r.price) as Current')
+                ->addSelect('r.dateRepair as Month')
+                ->groupBy('Month')
+                ->getQuery()
+                ->getResult();
+
+            $previousMonth = $this->previousMonth($user)
+                ->select('COUNT(r.price) as Previous')
+                ->addSelect('r.dateRepair as Month')
+                ->groupBy('Month')
+                ->getQuery()
+                ->getResult();
+
+        
+
+        $currentMonth = !empty($currentMonth) && isset($currentMonth[0])  ? intval($currentMonth[0]['Current']) : 0;
+        $previousMonth = !empty($currentMonth) && isset($previousMonth[0]) ? intval($previousMonth[0]['Previous']) : 0;
+
+
+        return $cvp = ['Current' => $currentMonth, 'Previous' => $previousMonth];
+    }
+
+    public function CVPCost($user){
+        $currentMonth = $this->currentMonth($user)
+            ->select('SUM(r.price) as Current')
+            ->addSelect('r.dateRepair as Month')
+            ->groupBy('Month')
+            ->getQuery()
+            ->getResult();
+
+        $previousMonth = $this->previousMonth($user)
+            ->select('SUM(r.price) as Previous')
+            ->addSelect('r.dateRepair as Month')
+            ->groupBy('Month')
+            ->getQuery()
+            ->getResult();
+
+
+
+        $currentMonth = !empty($currentMonth) && isset($currentMonth[0])  ? intval($currentMonth[0]['Current']) : 0;
+        $previousMonth = !empty($currentMonth) && isset($previousMonth[0]) ? intval($previousMonth[0]['Previous']) : 0;
+
+
+        return $cvp = ['Current' => $currentMonth, 'Previous' => $previousMonth];
     }
 
     public function deleteRepair(Repair $repair){

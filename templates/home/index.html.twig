@@ -3,13 +3,145 @@
 {# {% block title %}Hello HomeController!{% endblock %} #}
 
 {% block body %}
-<div class="grid grid-cols-8 w-full h-full w:md-2/3 mx-auto ">
+<div class="background w-full h-full w:md-2/3 mx-auto">
         {{ include('shared/_form_nav.html.twig') }}
-        <div class="col-span-6 flex justify-evenly place-items-center">
+
+        <div class="flex flex-col w-10/12 h-screen place-items-center justify-center ml-40 gap-5">
+        
         {% for flash_error in app.flashes('success') %}
-        <div class="success alert-success absolute top-3 w-1/3 text-center rounded-md bg-green-200 border border-green-300 text-green-700 p-3" role="alert">{{ flash_error }}</div>
+                <div class="success alert-success absolute top-3 w-1/3 text-center rounded-md bg-green-200 border border-green-300 text-green-700 p-3" role="alert">{{ flash_error }}</div>
         {% endfor %}
-                <div class="bg-gray-300 rounded-2xl w-2/5 h-1/3 p-5 font-mono">
+
+                <div class="top flex gap-5">
+                        <div class="top__box ring-1 ring-gray-700">
+                                <div class="top__box-text">
+                                        <p class="top__box-text--name">Pojazdy</p>
+                                        <p class="top__box-text--number">{{ vehicles|length }}</p>
+                                </div>
+                                <div class="top__box-icon top__vehicles">
+                                        <i class="fa-solid fa-car-rear text-2xl"></i>
+                                </div>
+                                <div class="top__box-bottom">
+                                        <i class="fa-solid fa-arrow-turn-up text-blue-500"></i>
+                                        <span>{% if lastVehicle is not null %}
+                                        {{ lastVehicle.brand }} {{ lastVehicle.model }} | {{ lastVehicle.numberPlate }}
+                                        {% else %}
+                                        ----
+                                        {% endif %}
+                                        </span>
+                                </div>
+                        </div>
+                        <div class="top__box ring-1 ring-gray-700">
+                                <div class="top__box-text">
+                                        <p class="top__box-text--name">Naprawy</p>
+                                        <p class="top__box-text--number">{{ repairs|length }}</p>
+                                </div>
+                                <div class="top__box-icon top__repairs">
+                                        <i class="fa-solid fa-wrench text-2xl"></i>
+                                </div>
+                                <div class="top__box-bottom">
+                                        {% if growthRepairs %}
+                                        <i class="fa-solid fa-arrow-trend-up text-red-800"></i>
+                                        <span class="text-red-500">
+                                                {{ growthRepairs }}% więcej niż miesiąc temu
+                                        </span>
+                                        {% elseif decreaseRepairs %}
+                                                <i class="fa-solid fa-arrow-trend-down  text-green-600"></i>
+                                                <span class="text-green-600 text-sm">
+                                                {{ decreaseRepairs }}% mniej niż miesiąc temu
+                                                </span>
+                                        {% elseif nothing == 0 %}
+                                                <i class="fa-solid fa-arrow-trend-down  text-green-600"></i>
+                                                <span class="text-green-600 text-sm">
+                                                ----
+                                                </span>
+                                        {% endif %}
+                                        
+
+                                </div>
+                        </div>
+                        <div class="top__box ring-1 ring-gray-700">
+                                 <div class="top__box-text">
+                                        <p class="top__box-text--name">Wydatki</p>
+                                        <p class="top__box-text--number"> 
+                                        {% if totalRepairs != 0 %}
+                                         {{ totalRepairs }}
+                                         {% else %}
+                                                0
+                                        {% endif %}
+                                         </p>
+                                </div>
+                                <div class="top__box-icon top__costs">
+                                        <i class="fa-solid fa-hand-holding-dollar text-2xl"></i>
+                                </div>
+                                <div class="top__box-bottom">
+                                        {% if growthCost != null %}
+                                        <i class="fa-solid fa-arrow-trend-up text-red-800"></i>
+                                        <span class="text-red-500">
+                                                {{ growthCost }}% więcej niż miesiąc temu
+                                        </span>
+                                        {% elseif decreaseCost != null %}
+                                                <i class="fa-solid fa-arrow-trend-down  text-green-600"></i>
+                                                <span class="text-green-600 text-sm">
+                                                {{ decreaseCost }}% mniej niż miesiąc temu
+                                                </span>
+                                        {% elseif nothingCost == 0 %}
+                                                <i class="fa-solid fa-arrow-trend-down  text-green-600"></i>
+                                                <span class="text-green-600 text-sm">
+                                                ----
+                                                </span>
+                                        {% endif %}
+                                        
+
+                                </div>
+                        </div>
+                        <div class="top__box ring-1 ring-gray-700">
+                                <div class="top__box-text">
+                                        <p class="top__box-text--name">Kalendarz</p>
+                                </div>
+                                <div class="top__box-icon top__calendar">
+                                        <i class="fa-regular fa-calendar-xmark text-2xl"></i>
+                                </div>
+                                <div class="top__box-bottom">
+                                        <div class="">
+                                                <i class="fa-solid fa-gear text-blue-500"></i>
+                                                <span>
+                                                {% if nextService is not null %}
+                                                {{ nextService|date('d-m-Y') }} | {% if nextServiceCountM != 0 %} {{ nextServiceCountM }} msc. {% elseif  nextServiceCountD > 1 or nextServiceCountD == 0 %}
+                                                        {{ nextServiceCountD }} dni {% elseif nextServiceCountD == 1 %}
+                                                                {{ nextServiceCountD }} dzień {% endif %}
+                                                {% else %}
+                                                        ----
+                                                {% endif %}
+                                                </span>
+                                        </div>
+                                        <div class="mt-5">
+                                                <i class="fa-solid fa-business-time text-blue-500"></i>
+                                                <span>
+                                                {% if nextInsurance is not null %}
+                                                {{ nextInsurance|date('d-m-Y') }} | {% if nextInsuranceCountM != 0 %} {{ nextInsuranceCountM }} msc. {% elseif  nextInsuranceCountD > 1 or nextInsuranceCountD == 0 %}
+                                                        {{ nextInsuranceCountD }} dni {% elseif nextInsuranceCountD == 1 %}
+                                                                {{ nextInsuranceCountD }} dzień {% endif %}
+                                                {% else %}
+                                                        ----
+                                                {% endif %}
+                                                </span>
+                                        </div>
+                                </div>
+                        </div>
+                </div>
+                <div class="middle ring-1 ring-gray-700 flex place-items-center justify-center">
+                        <div class="chart w-full h-full ml-8 mr-5 pt-1 pb-1">
+                        {{ render_chart(chart) }}
+                        </div>
+                </div>
+                <div class="bottom ring-1 ring-gray-700 flex place-items-center justify-center">
+                        <div class="bottom__left"></div>
+                        <div class="bottom__right"></div>
+                </div>
+
+                        {# {{ render_chart(chart) }} #}
+                {# <div class="bg-gray-300 rounded-2xl w- h-40 p-5 font-mono">
                         <h2 class="text-xl">POJAZDY</h2>
                         <p>Posiadane: {{ vehicles|length }}</p>
                         <p>Najbliszy termin przeglądu: 
@@ -58,8 +190,8 @@
                                 ----
                         {% endif %}
                         </p>
-                </div>
-        
+                </div> #}
+
         </div>
                 {# <div class="">
                         Najbliszy przegląd:
