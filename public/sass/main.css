@@ -39,13 +39,25 @@
   display: none;
 }
 
+.content-form {
+  bottom: 0;
+}
+
 .content-form, .form__button {
-  transition: transform 0.2s;
+  transition: bottom 0.2s;
+}
+
+.content-table {
+  height: 50.5%;
 }
 
 .hidden-form__form {
-  transform: translateY(92%);
-  transition: transform 0.2s;
+  bottom: -16em;
+  transition: bottom 0.2s;
+}
+
+.hidden-form__table {
+  height: 90%;
 }
 
 .rotated {
