@@ -1,7 +1,7 @@
-<div class="row-span-3 w-full h-full mx-auto col-span-6 place-content-center text-white">
+<div class="flex w-full h-full mx-auto place-content-center text-white">
     {{ form_start(form) }}
-    <div class="w-full mx-auto grid grid-rows-3 gap-5 h-full place-content-center">
-        <div class="w-full grid grid-cols-4 gap-16 text-left font-light">
+    <div class="w-full mx-auto flex flex-col gap-5 h-full place-content-center">
+        <div class="w-full flex gap-16 text-left font-light">
             <div class="flex flex-col">
                 {{ form_label(form.brand, 'Marka') }}
                 {{ form_widget(form.brand, {'attr':{'class': 'form__widget rounded-md border border-gray-700'}}) }}
@@ -11,19 +11,15 @@
                 {{ form_widget(form.model, {'attr':{'class': 'form__widget rounded-md border border-gray-700'}}) }}
             </div>
             <div class="flex flex-col">
-                {{ form_label(form.year, 'Rok produkcji') }}
-                {{ form_widget(form.year, {'attr':{'class': 'form__widget rounded-md border border-gray-700'}}) }}
-            </div>
-            <div class="flex flex-col">
-                {{ form_label(form.insurance, 'Ubezpieczenie') }}
-                {{ form_widget(form.insurance, {'attr':{'class': 'form__widget rounded-md border border-gray-700'}}) }}
-            </div>
-        </div>
-        <div class="grid grid-cols-3 w-full gap-20 text-left font-light">
-            <div class="flex flex-col">
                 {{ form_label(form.numberPlate, 'Tablice rejestracyjne') }}
                 {{ form_widget(form.numberPlate, {'attr':{'class': 'form__widget rounded-md border border-gray-700'}}) }}
             </div>
+            <div class="flex flex-col">
+                {{ form_label(form.year, 'Rok produkcji') }}
+                {{ form_widget(form.year, {'attr':{'class': 'form__widget rounded-md border border-gray-700'}}) }}
+            </div>
+        </div>
+        <div class="flex w-full gap-16 text-left font-light">
             <div class="flex flex-col">
                 {{ form_label(form.datePurchase, 'Rok zakupu') }}
                 {{ form_widget(form.datePurchase, {'attr':{'class': 'form__widget rounded-md border border-gray-700'}}) }}
@@ -31,6 +27,10 @@
             <div class="flex flex-col">
                 {{ form_label(form.service, 'Przegląd') }}
                 {{ form_widget(form.service, {'attr':{'class': 'form__widget rounded-md border border-gray-700'}}) }}
+            </div>
+            <div class="flex flex-col">
+                {{ form_label(form.insurance, 'Ubezpieczenie') }}
+                {{ form_widget(form.insurance, {'attr':{'class': 'form__widget rounded-md border border-gray-700'}}) }}
             </div>
         </div>
         <div class="w-full">
