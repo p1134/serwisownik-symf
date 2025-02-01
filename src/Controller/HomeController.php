@@ -67,7 +67,7 @@ class HomeController extends AbstractController
                 'scales' => [
                     'y' => [
                         'suggestedMin' => 0,
-                        'suggestedMax' => 200,
+                        // 'suggestedMax' => 200,
                         'ticks' =>[
                             'color' => 'white',
                             'font' => [
@@ -181,10 +181,6 @@ class HomeController extends AbstractController
             '#20B2AA', '#D2691E', '#FF4500', '#DC143C', '#32CD32', '#8A2BE2',
             '#8B4513', '#FF1493'
         ];
-        // for ($i = 1; $i <= count($SBVDataVehicles); $i++){
-        //     $colorsArray[] = getRandomColor();
-        // }
-        // dd($colorsArray);
 
 
         $chartSBV->setData([
@@ -199,11 +195,30 @@ class HomeController extends AbstractController
         ]);
 
         $chartSBV->setOptions([
+            'responsive' => true,
             'maintainAspectRatio' => false,
             'plugins' => [
                 'legend' => [
+                    // 'maxWidth' => 100,
                     'position' => 'left',
+                    'align' => 'end',
+                    'labels' => [
+                        'boxWidth' => 15,
+                        'boxHeight' => 15,
+                        'pointStyle' => 'rectRounded', 
+                        'usePointStyle' => true,
+                        'color' => 'white',
+                        'font' => [
+                            'size' => 16,
+                            'weight' => 200,
+                        ],
+                        ],
+                        'padding' => [
+                            'top' => 20,
+                        ]
+                    ],
                     'title' => [
+                        'align' => 'start',
                         'display' => true,
                         'text' => 'Wydatki wg pojazdów',
                         'color' => 'white',
@@ -212,19 +227,92 @@ class HomeController extends AbstractController
                             'weight' => 200,
                         ],
                         'padding' => [
-                            'bottom' => 15,
+                            // 'bottom' => 15,
                         ]
                     ],
-                    'labels' => [
-                        'color' => 'white',
-                        'font' => [
-                            'size' => 14,
-                            'weight' => 200,
+                    ],
+                    'layout' => [
+                        'align' => 'center',
+                        'padding' => [
+                            'left' => 20,
+                            // 'bottom' => 10,
+                            
                         ]
                     ]
-                ]
-                    ],
         ]);
+
+        //
+
+        //Sum by part
+        $chartCBP = $chartBuilder->createChart(Chart::TYPE_BAR);
+        // $repairsSBP = $repairs->getSumByPart($user);
+        $repairsCBP = $repairs->getCountByPart($user);
+        $repairCBPArray = [];
+        foreach ($repairsCBP as $item) {
+            $repairsCBPArray[$item['Part']] = $item['Count'] ;
+        }
+        $LabelsCBP = array_keys($repairsCBPArray);
+        $DataCBP = array_values($repairsCBPArray);
+        // dd($repairsCBPArray, $LabelsCBP, $DataCBP);
+
+        $chartCBP->setData([
+            'labels' =>  $LabelsCBP,
+            'color' => 'rgb(95, 131, 224)',
+            'datasets' => [
+                [
+                'borderRadius' => 10,
+                'data' => $DataCBP,
+                'label' => 'Naprawy według rodzaju',
+                'backgroundColor' => '#4049FF',
+                'borderWidth' => '2',
+                'color' => 'white',
+                ]],
+            ]);
+
+                $chartCBP->setOptions([
+                'responsive' => true,
+                'maintainAspectRatio' => false, 
+                'scales' => [
+                    'y' => [
+                        'suggestedMin' => 0,
+                        // 'suggestedMax' => 10,
+                        'ticks' =>[
+                            'color' => 'white',
+                            'font' => [
+                                'size' => 16,
+                                'weight' => 200,
+                                ],
+                            // 'padding' => 3,
+                        ],
+                        'grid' => [
+                            'color' => '#E2E2E2',
+                            'lineWidth' => 0.1,
+                        ],
+                        'offset' => true,
+                    ],
+                     'x' => [
+                        'grid' => [
+                            'display' => false
+                        ],
+                        'ticks' =>[
+                            'display' => false,
+                            ],
+                            'offset' => true,
+                        ],
+                ],
+                'plugins' => [
+                    'legend' => [
+                        'labels' => [
+                            'boxWidth' => 0,
+                            'color' => 'white',
+                            'font' => [
+                                'size' => 20,
+                                'weight' => 300,
+                            ]
+                        ]
+                        ]
+                ]
+            ]);
 
         //
 
@@ -253,6 +341,8 @@ class HomeController extends AbstractController
             'nothing' => $nothing,
             'nothingCost' => $nothingCost,
             'chartSBV' => $chartSBV,
+            'getSumByPart' => $repairs->getSumByPart($user),
+            'chartCBP' => $chartCBP,
         ]);
 
     }

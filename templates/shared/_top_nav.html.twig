@@ -1,9 +1,14 @@
-<div class="w-full h-8 bg-blue-950 flex justify-end place-items-center gap-12">
 {% if data_sort == 'vehicle' %}
+<div class="main__box w-100 h-12 ring-1 flex place-items-center ring-gray-700 rounded-md">
+    <div class="w-auto h-full flex border-r border-gray-700">
+        <i class="fa-solid fa-sort text-gray-200 place-items-center flex p-4 h-full"></i>
+    </div>
+    <div class="flex place-items-center pr-4">
     {{ include('vehicle/_sort.html.twig') }}
-{% endif %}
-{% if data_sort == 'repair' %}
+    <i class="fa-solid fa-chevron-down text-white"></i>
+    </div>
+</div>
+{% elseif data_sort == 'repair' %}
     {{ include('repair/_filtering.html.twig') }}
     {{ include('repair/_sort.html.twig') }}
 {% endif %}
-</div>

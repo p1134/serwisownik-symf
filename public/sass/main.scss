@@ -26,12 +26,41 @@
 .hidden{
     display: none;
 }
+
+.content-form, .form__button{
+    transition: transform 0.2s;
+}
+.content-table{
+    // height: auto;
+}
+.hidden-form__form{
+    transform:translateY(92%);
+    transition: transform 0.2s;
+}
+.hidden-form__table{
+    // height: 100em;
+}
+.rotated{
+    transform: rotate(180deg);
+    transition: transform 0.2s;
+}
+
+
+
 .checkbox__dropdown-content{
     background-color: #666967;
 }
 
-.nav__menu{
+.main{
+    height: 100vh;
+}
+.main__box{
     background-color: #202B39;
+
+    &-content{
+        // height: 24em;
+        overflow-y: auto;
+    }
 }
 
 .background{
@@ -50,6 +79,11 @@
     height: 40px;
     border-radius: 30%;
     background-color: #205ba771;
+}
+.page__title{
+    color: white;
+    font-size: 1.8rem;
+    font-weight: 200;
 }
 
 .top{
@@ -130,5 +164,55 @@
     &__box{
         border-radius: 1em;
         background-color: #202B39;
+    }
+}
+.table{
+    &__head{
+        background-color: #ffffff10;
+        padding: 1em;
+        th{
+            padding: 0.6em;
+            font-weight: 300;
+        }
+    }
+    &__row{
+        font-weight: 200;
+        padding: 1em;
+    }
+}
+.action-btn{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 30px;
+    height: 30px;
+    border-radius: 5px;
+    &--edit{
+    background-color: #A58D4C;
+    }
+    &--remove{
+    background-color: #7C3436;
+    }
+}
+.alertYellow{
+    color: #A58D4C;
+}
+.alertRed{
+    color: #7C3436;
+}
+.form{
+    &__widget{
+    padding-left: 1em;
+    padding-right: 1em;
+    padding-top: 0.3em;
+    padding-bottom: 0.3em;
+    background-color: #323D4E;
+    }
+
+    &__btn{
+        background-color: #2B3E68;
+    &:hover{
+        background-color: #2b3e68af;
+    }
     }
 }

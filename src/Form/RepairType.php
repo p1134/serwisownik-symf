@@ -31,7 +31,19 @@ class RepairType extends AbstractType
                     ->setParameter('ownerId', $user);
                 }
             ])
-            ->add('part')
+            ->add('part', ChoiceType::class,[
+                'choices' => [
+                    'Mechaniczne' => 'mechanic',
+                    'Karoseryjne' => 'body',
+                    'Układ elektryczny i elektroniczny' => 'electric_electronic',
+                    'Klimatyzacja i wentylacja' => 'ac_ventilation',
+                    'Płyny eksploatacyjne' => 'fluid',
+                    'Opony i felgi' => 'wheels',
+                    'Wnętrze' => 'interior',
+                    'Inne' => 'other',
+                ],
+                'placeholder' => 'Wybierz rodzaj'
+            ])
             ->add('price')
             ->add('dateRepair', null, [
                 'widget' => 'single_text',

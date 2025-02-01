@@ -39,12 +39,33 @@
   display: none;
 }
 
+.content-form, .form__button {
+  transition: transform 0.2s;
+}
+
+.hidden-form__form {
+  transform: translateY(92%);
+  transition: transform 0.2s;
+}
+
+.rotated {
+  transform: rotate(180deg);
+  transition: transform 0.2s;
+}
+
 .checkbox__dropdown-content {
   background-color: #666967;
 }
 
-.nav__menu {
+.main {
+  height: 100vh;
+}
+
+.main__box {
   background-color: #202B39;
+}
+.main__box-content {
+  overflow-y: auto;
 }
 
 .background {
@@ -63,6 +84,12 @@
   height: 40px;
   border-radius: 30%;
   background-color: rgba(32, 91, 167, 0.4431372549);
+}
+
+.page__title {
+  color: white;
+  font-size: 1.8rem;
+  font-weight: 200;
 }
 
 .top {
@@ -142,4 +169,54 @@
 .bottom__box {
   border-radius: 1em;
   background-color: #202B39;
+}
+
+.table__head {
+  background-color: rgba(255, 255, 255, 0.062745098);
+  padding: 1em;
+}
+.table__head th {
+  padding: 0.6em;
+  font-weight: 300;
+}
+.table__row {
+  font-weight: 200;
+  padding: 1em;
+}
+
+.action-btn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 5px;
+}
+.action-btn--edit {
+  background-color: #A58D4C;
+}
+.action-btn--remove {
+  background-color: #7C3436;
+}
+
+.alertYellow {
+  color: #A58D4C;
+}
+
+.alertRed {
+  color: #7C3436;
+}
+
+.form__widget {
+  padding-left: 1em;
+  padding-right: 1em;
+  padding-top: 0.3em;
+  padding-bottom: 0.3em;
+  background-color: #323D4E;
+}
+.form__btn {
+  background-color: #2B3E68;
+}
+.form__btn:hover {
+  background-color: rgba(43, 62, 104, 0.6862745098);
 }/*# sourceMappingURL=main.css.map */

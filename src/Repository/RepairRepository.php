@@ -266,6 +266,33 @@ class RepairRepository extends ServiceEntityRepository
         return $query;
     }
 
+    public function getSumByPart($user){
+        $query = $this-> findAllQuery(withPrice: true, withPart: true, withVehicle: true)
+            ->select('SUM(r.price) as Sum')
+            ->addSelect('r.part AS Part')
+            ->where('r.user = :user')
+            ->setParameter('user', $user->getId())
+            ->groupBy('Part')
+            ->getQuery()
+            ->getResult();
+        return $query;
+    }
+    public function getCountByPart($user){
+        $query = $this->findAllQuery(withPart: true, withVehicle: true, withId: true)
+
+            ->select('COUNT(r.part) AS Count')
+            ->addselect('r.part AS Part')
+            ->where('r.user = :user')
+            ->setParameter('user', $user->getId())
+            ->groupBy('r.part')
+            ->getQuery()
+            ->getResult();
+            return $query;
+            
+
+        // $mechanic = $query->andWhere('r.part = mechanic')
+    ;}
+
     public function mostRepairs($user){
         return $this->findAllQuery(withVehicle: true)
             ->select('COUNT(r.vehicle) AS count')

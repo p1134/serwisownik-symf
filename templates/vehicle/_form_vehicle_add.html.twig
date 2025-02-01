@@ -1,40 +1,40 @@
-<div class="row-span-3 bg-gray-200 w-full h-full mx-auto col-span-6 place-content-center font-mono">
+<div class="row-span-3 w-full h-full mx-auto col-span-6 place-content-center text-white">
     {{ form_start(form) }}
     <div class="w-full mx-auto grid grid-rows-3 gap-5 h-full place-content-center">
-        <div class="w-full grid grid-cols-4 gap-10 font-mono">
+        <div class="w-full grid grid-cols-4 gap-16 text-left font-light">
             <div class="flex flex-col">
                 {{ form_label(form.brand, 'Marka') }}
-                {{ form_widget(form.brand, {'attr':{'class': 'rounded-md border border-gray-300'}}) }}
+                {{ form_widget(form.brand, {'attr':{'class': 'form__widget rounded-md border border-gray-700'}}) }}
             </div>
             <div class="flex flex-col">
                 {{ form_label(form.model, 'Model') }}
-                {{ form_widget(form.model, {'attr':{'class': 'rounded-md border border-gray-300'}}) }}
+                {{ form_widget(form.model, {'attr':{'class': 'form__widget rounded-md border border-gray-700'}}) }}
             </div>
             <div class="flex flex-col">
                 {{ form_label(form.year, 'Rok produkcji') }}
-                {{ form_widget(form.year, {'attr':{'class': 'rounded-md border border-gray-300'}}) }}
+                {{ form_widget(form.year, {'attr':{'class': 'form__widget rounded-md border border-gray-700'}}) }}
             </div>
             <div class="flex flex-col">
                 {{ form_label(form.insurance, 'Ubezpieczenie') }}
-                {{ form_widget(form.insurance, {'attr':{'class': 'rounded-md border border-gray-300'}}) }}
+                {{ form_widget(form.insurance, {'attr':{'class': 'form__widget rounded-md border border-gray-700'}}) }}
             </div>
         </div>
-        <div class="grid grid-cols-3 w-full gap-20">
+        <div class="grid grid-cols-3 w-full gap-20 text-left font-light">
             <div class="flex flex-col">
                 {{ form_label(form.numberPlate, 'Tablice rejestracyjne') }}
-                {{ form_widget(form.numberPlate, {'attr':{'class': 'rounded-md border border-gray-300'}}) }}
+                {{ form_widget(form.numberPlate, {'attr':{'class': 'form__widget rounded-md border border-gray-700'}}) }}
             </div>
             <div class="flex flex-col">
                 {{ form_label(form.datePurchase, 'Rok zakupu') }}
-                {{ form_widget(form.datePurchase, {'attr':{'class': 'rounded-md border border-gray-300'}}) }}
+                {{ form_widget(form.datePurchase, {'attr':{'class': 'form__widget rounded-md border border-gray-700'}}) }}
             </div>
             <div class="flex flex-col">
                 {{ form_label(form.service, 'Przegląd') }}
-                {{ form_widget(form.service, {'attr':{'class': 'rounded-md border border-gray-300'}}) }}
+                {{ form_widget(form.service, {'attr':{'class': 'form__widget rounded-md border border-gray-700'}}) }}
             </div>
         </div>
         <div class="w-full">
-            <button type="submit" class="pl-8 pr-8 pt-2 pb-2 bg-blue-900 text-white text-md rounded-md w-auto font-mono font-semibold text-md h-fit mr-4">Dodaj</button>
+            <button type="submit" class="form__btn pl-8 pr-8 pt-2 pb-2 text-white text-md rounded-md w-full font-semibold text-md h-fit mr-4">Dodaj</button>
         </div>
     </div>
     {{ form_end(form) }}
