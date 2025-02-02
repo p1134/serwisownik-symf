@@ -1,4 +1,44 @@
-<div class="row-span-3 bg-gray-200 w-full h-full mx-auto col-span-6 place-content-center">
+<div class="flex w-full h-full mx-auto place-content-center text-white">
+    {{ form_start(form) }}
+    <div class="w-full mx-auto flex flex-col gap-5 h-full place-content-center">
+        <div class="w-full flex gap-16 text-left font-light">
+            <div class="flex flex-col">
+                {{ form_label(form.vehicle, 'Pojazd') }}
+                {{ form_widget(form.vehicle, {'attr':{'class': 'form__widget rounded-md border border-gray-700'}}) }}
+            </div>
+            <div class="flex flex-col">
+                {{ form_label(form.part, 'Serwis') }}
+                {{ form_widget(form.part, {'attr':{'class': 'form__widget rounded-md border border-gray-700'}}) }}
+            </div>
+            <div class="flex flex-col">
+                {{ form_label(form.price, 'Koszt') }}
+                {{ form_widget(form.price, {'attr':{'class': 'form__widget rounded-md border border-gray-700'}}) }}
+            </div>
+            <div class="flex flex-col">
+                {{ form_label(form.dateRepair, 'Data') }}
+                {{ form_widget(form.dateRepair, {'attr':{'class': 'form__widget rounded-md border border-gray-700'}}) }}
+            </div>
+        </div>
+        <div class="flex w-full gap-16 text-left font-light">
+            <div class="flex flex-col">
+                {{ form_label(form.status, 'Status') }}
+                {{ form_widget(form.status, {'attr':{'class': 'form__widget rounded-md border border-gray-700'}}) }}
+            </div>
+            <div class="flex flex-col">
+                {{ form_label(form.description, 'Notatka') }}
+                {{ form_widget(form.description, {'attr':{'class': 'form__widget rounded-md border border-gray-700'}}) }}
+            </div>
+        </div>
+        <div class="w-full">
+            <button type="submit" class="form__btn pl-8 pr-8 pt-2 pb-2 text-white text-md rounded-md w-full font-semibold text-md h-fit mr-4">Dodaj</button>
+        </div>
+    </div>
+    {{ form_end(form) }}
+</div>
+
+
+
+{# <div class="row-span-3 bg-gray-200 w-full h-full mx-auto col-span-6 place-content-center">
     {{ form_start(form) }}
     <div class="w-full mx-auto grid grid-rows-3 gap-5 h-full place-content-center">
         <div class="w-full grid grid-cols-4 gap-10 font-mono">
@@ -35,4 +75,4 @@
         </div>
     </div>
     {{ form_end(form) }}
-</div>
+</div> #}

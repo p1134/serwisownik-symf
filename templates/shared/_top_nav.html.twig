@@ -1,4 +1,5 @@
 {% if data_sort == 'vehicle' %}
+
 <div class="main__box w-100 h-12 ring-1 flex place-items-center ring-gray-700 rounded-md">
     <div class="w-auto h-full flex border-r border-gray-700">
         <i class="fa-solid fa-sort text-gray-200 place-items-center flex p-4 h-full"></i>
@@ -8,7 +9,23 @@
     <i class="fa-solid fa-chevron-down text-white"></i>
     </div>
 </div>
+
 {% elseif data_sort == 'repair' %}
-    {{ include('repair/_filtering.html.twig') }}
-    {{ include('repair/_sort.html.twig') }}
+
+<div class="main__box w-100 h-12 ring-1 flex place-items-center ring-gray-700 rounded-md">
+    <div class="w-auto h-full flex border-r border-gray-700">
+        <i class="fa-solid fa-filter text-gray-200 place-items-center flex p-4 h-full text-sm"></i>
+    </div>
+    <div class="flex place-items-center pr-4">
+        {{ include('repair/_filtering.html.twig') }}
+        <i class="fa-solid fa-chevron-down text-white"></i>
+    </div>
+    <div class="w-auto h-full flex border border-gray-700">
+        <i class="fa-solid fa-sort text-gray-200 place-items-center flex p-4 h-full"></i>
+    </div>
+    <div class="flex place-items-center pr-4">
+        {{ include('repair/_sort.html.twig') }}
+        <i class="fa-solid fa-chevron-down text-white"></i>
+    </div>
+</div>
 {% endif %}

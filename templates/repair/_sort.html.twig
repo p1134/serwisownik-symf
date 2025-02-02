@@ -1,7 +1,6 @@
 <form action="{{ path('app_repair') }}" method="GET">
-    <i class="fa-solid fa-sort text-gray-200 place-items-center mr-1"></i>
     
-    <select name="sort" id="sort" onchange="this.form.submit()" class="rounded-md border bg-gray-200 border-gray-300 text-sm h-5 mr-10">
+    <select name="sort" id="sort" onchange="this.form.submit()" class="rounded-md bg-transparent appearance-none text-white text-md pl-4 w-auto pr-4">
         <option {% if sort is empty %}selected{% endif %}>Domyślnie</option>
             <option value="alphabetASC" {% if sort == 'alphabetASC' %}selected{% endif %}>Alfabetycznie rosnąco</option>
             <option value="alphabetDESC" {% if sort == 'alphabetDESC' %}selected{% endif %}>Alfabetycznie malejąco</option>

@@ -50,6 +50,9 @@
 .content-table {
   height: 50.5%;
 }
+.content-table--repair {
+  height: 48%;
+}
 
 .hidden-form__form {
   bottom: -16em;
@@ -60,13 +63,17 @@
   height: 90%;
 }
 
+.hidden-form__table--repair {
+  height: 85%;
+}
+
 .rotated {
   transform: rotate(180deg);
   transition: transform 0.2s;
 }
 
 .checkbox__dropdown-content {
-  background-color: #666967;
+  background-color: rgba(54, 54, 54, 0.8352941176);
 }
 
 .main {

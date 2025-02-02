@@ -36,6 +36,9 @@
 .content-table{
     height: 50.5%;
     // transition: height 0.2s;
+    &--repair{
+        height: 48%;
+    }
 }
 .hidden-form__form{
     bottom: -16em;
@@ -43,6 +46,10 @@
 }
 .hidden-form__table{
     height: 90%;
+    // transition: height 0.1s;
+}
+.hidden-form__table--repair{
+    height: 85%;
     // transition: height 0.1s;
 }
 .rotated{
@@ -53,7 +60,7 @@
 
 
 .checkbox__dropdown-content{
-    background-color: #666967;
+    background-color: #363636d5;
 }
 
 .main{
