@@ -6,13 +6,20 @@
     <td class="table__row">{{ vehicle.datePurchase }}</td>
     <td class="table__row flex gap-3 justify-center">
         {% if currentDate > vehicle.service %}
-        <span class="inline alertYellow"><i class="fa-solid fa-triangle-exclamation"></i></span>
-        {% elseif currentDate|date('Y-m-d') == (vehicle.service|date_modify('0 day'))|date('Y-m-d') %}
         <span class="inline alertRed"><i class="fa-solid fa-triangle-exclamation"></i></span>
+        {% elseif currentDate.diff(vehicle.service).days <= 7 and currentDate.diff(vehicle.service).days >= 0 %}
+        <span class="inline alertYellow"><i class="fa-solid fa-triangle-exclamation"></i></span>
         {% endif %}
         {{ vehicle.service|date('d-m-Y') }}
     </td>
-    <td class="table__row">{{ vehicle.insurance|date('d-m-Y') }}</td>
+    <td class="table__row">
+        {% if currentDate > vehicle.insurance %}
+        <span class="inline alertRed"><i class="fa-solid fa-triangle-exclamation"></i></span>
+        {% elseif currentDate.diff(vehicle.insurance).days <= 7 and currentDate.diff(vehicle.insurance).days >= 0 %}
+        <span class="inline alertYellow"><i class="fa-solid fa-triangle-exclamation"></i></span>
+        {% endif %}
+        {{ vehicle.insurance|date('d-m-Y') }}
+    </td>
     <td class="flex gap-3 justify-center">
         <div class="action-btn action-btn--edit">
             <a href="{{ path('app_vehicle_edit', {vehicle: vehicle.id}) }}"><i class="fa-solid fa-pen-to-square"></i></a>

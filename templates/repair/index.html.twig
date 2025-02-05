@@ -1,3 +1,4 @@
+
 {% extends 'base.html.twig' %}
 
 {% block body %}
@@ -7,13 +8,13 @@
     </div>
     <div class="flex flex-col w-10/12 h-screen place-items-center justify-between ml-40">
 
-        <div class="flex w-full justify-between place-items-center mt-4" data-sort="vehicle">
-            <h2 class="page__title">Naprawy</h2>
-            {{ include('shared/_top_nav.html.twig') }}
-        </div>
+        <div class="flex flex-col place-items-center gap-5 w-full h-full">
+            <div class="flex w-full justify-between place-items-center mt-4" data-sort="vehicle">
+                <h2 class="page__title">Naprawy</h2>
+                {{ include('shared/_top_nav.html.twig') }}
+            </div>
 
-        <div class="flex flex-col w-full h-full justify-between">
-            <div class="content-table content-table--repair main__box main__box-content flex w-full rounded-md ring-gray-700 ring-1 mt-4">
+            <div class="content-table content-table--repair main__box overflow-y-scroll flex w-full h-full rounded-md ring-gray-700 ring-1">
             <table class="w-full text-white">
                 <tr class="table__head">
                         <th>ID</th>
@@ -32,63 +33,15 @@
             </table>
             
             </div>
-        </div>
-            <div class="content-form main__box flex flex-col w-10/12 h-2/5 rounded-md ring-gray-700 ring-1 p-2 place-content-center text-center absolute">
-                <i class="form__button fa-solid fa-chevron-down text-white cursor-pointer"></i>
+            <div class="content-form main__box flex flex-col w-full pb-5 rounded-md ring-gray-700 ring-1 p-2 place-content-center text-center">
+                <i class="form__button fa-solid fa-chevron-down text-white cursor-pointer text-xl"></i>
                 {% if form_type == 'edit' %}
                     {% embed "repair/_edit_form.html.twig" %}{% endembed %}
                 {% else %}
                     {% embed "repair/_form_repair_add.html.twig" %}{% endembed %}   
                 {% endif %}
             </div>
+        </div>
     </div>
 </div>
 {% endblock %}
-
-
-
-
-{# {% extends 'base.html.twig' %}
-
-{% block body %}
-<div class="w-full h-screen w:md-2/3 mx-auto flex overflow-hidden">
-    <div class="nav">
-        {{ include('shared/_form_nav.html.twig') }}
-    </div>
-    <div class="flex flex-col w-10/12 h-screen place-items-center justify-between ml-40">
-
-        <div class="flex w-full justify-between place-items-center mt-4" data-sort="vehicle">
-            <h2 class="page__title">Naprawy</h2>
-            {{ include('shared/_top_nav.html.twig') }}
-        </div>
-
-        <div class="flex flex-col w-full h-full justify-between">
-            <div class="content-table main__box main__box-content flex w-full rounded-md ring-gray-700 ring-1 mt-4">
-                <table class="w-full text-white">
-                    <tr class="table__head">
-                        <th>ID</th>
-                        <th>POJAZD</th>
-                        <th>SERWIS</th>
-                        <th>KOSZT</th>
-                        <th>DATA</th>
-                        <th>STATUS</th>
-                        <th>NOTATKA</th>
-                        <th>EDYTUJ / USUŃ</th>
-                    </tr>
-                {% for repair in repairs %}
-                    {{ include('repair/_repair.html.twig', { 'repair': repair, 'filters': filters }) }}
-                {% endfor %}
-                </table>  
-            </div>
-        </div>
-        <div class="content-form main__box flex flex-col w-10/12 h-2/5 rounded-md ring-gray-700 ring-1 p-2 place-content-center text-center absolute">
-            <i class="form__button fa-solid fa-chevron-down text-white cursor-pointer"></i>
-            {% if form_type == 'edit' %}
-                {% embed "repair/_edit_form.html.twig" %}{% endembed %}
-            {% else %}
-                {% embed "repair/_form_repair_add.html.twig" %}{% endembed %}
-            {% endif %}
-        </div>
-    </div>
-</div>
-{% endblock %} #}

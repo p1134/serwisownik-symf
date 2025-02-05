@@ -1,14 +1,28 @@
-<div class="main__box rounded-tr-2xl rounded-br-2xl h-screen w-20 flex flex-col place-items-center justify-between ring-1 ring-gray-700 pt-5 pb-10 absolute">
-    <div class="flex flex-col place-items-center gap-8">
-        <i class="fa-solid fa-bars-staggered text-white text-xl cursor-pointer"></i>
-        <button class="menu__profile ring-gray-700 ring-1"><i class="fa-regular fa-user text-white text-xl"></i></button>
+<div class="nav__box main__box z-10 rounded-tr-2xl rounded-br-2xl h-screen justify-between ring-1 ring-gray-700 pt-5 pb-10 absolute">
+    <div class="flex flex-col w-full place-items-center gap-8">
+        <div class="nav__btn-box">
+            <i class="nav__btn fa-solid fa-bars-staggered text-white text-xl cursor-pointer"></i>
+        </div>
+        <div class="nav__profile flex place-items-center">
+            <button class="menu__profile ring-gray-700 ring-1"><i class="fa-regular fa-user text-white text-xl"></i></button>
+            <p class="nav__hidden">{{ user }}</p>
+        </div>
     </div>
     <div class="flex flex-col justify-items-center gap-8">
-        <a href="{{ path('app_index') }}"><button class="menu__button ring-1 ring-gray-700"><i class="fa-brands fa-slack text-white text-xl"></i></button></a>
-        <a href="{{ path('app_vehicle') }}"><button class="menu__button ring-1 ring-gray-700"><i class="fa-solid fa-car-rear text-white text-xl"></i></button></a>
-        <a href="{{ path('app_repair') }}"><button class="menu__button ring-1 ring-gray-700"><i class="fa-solid fa-wrench text-white text-xl"></i></button></a>
+        <a href="{{ path('app_index') }}" class="flex place-items-center">
+            <button class="{% if app.request.get('_route') == 'app_index' %} menu__button--active {% else %} menu__button {% endif %}ring-1 ring-gray-700"><i class="fa-brands fa-slack text-white text-xl"></i></button>
+            <p class="nav__hidden text-xl">DASHBOARD</p>
+        </a>
+        <a href="{{ path('app_vehicle') }}" class="flex place-items-center">
+            <button class="{% if app.request.get('_route') == 'app_vehicle' or app.request.get('_route') == 'app_vehicle_edit'  %} menu__button--active {% else %} menu__button {% endif %}ring-1 ring-gray-700"><i class="fa-solid fa-car-rear text-white text-xl"></i></button>
+            <p class="nav__hidden text-xl">POJAZDY</p>
+        </a>
+        <a href="{{ path('app_repair') }}" class="flex place-items-center">
+            <button class="{% if app.request.get('_route') == 'app_repair' or app.request.get('_route') == 'app_repair_edit'  %} menu__button--active {% else %} menu__button {% endif %}ring-1 ring-gray-700"><i class="fa-solid fa-wrench text-white text-xl"></i></button>
+            <p class="nav__hidden text-xl">NAPRAWY</p>
+        </a>
     </div>
-    <div class="place-items-center">
+    <div class="flex place-content-center w-full">
         <a href="{{ path('app_logout') }}"><i class="fa-solid fa-arrow-right-from-bracket text-white text-3xl"></i></a>
     </div>
 </div>

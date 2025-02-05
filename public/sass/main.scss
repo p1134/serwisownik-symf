@@ -26,33 +26,29 @@
 .hidden{
     display: none;
 }
+.content-table{
+    height: auto;
+    transition: height 0.2s;
+}
 .content-form{
-    bottom: 0;
+    height: auto;
+    transition: height 0.2s;
 }
 
-.content-form, .form__button{
-    transition: bottom 0.2s;
-}
-.content-table{
-    height: 50.5%;
-    // transition: height 0.2s;
-    &--repair{
-        height: 48%;
-    }
-}
 .hidden-form__form{
-    bottom: -16em;
-    transition: bottom 0.2s;
+    height: 2.5em;
+    transition: height 0.2s;
 }
 .hidden-form__table{
     height: 90%;
     // transition: height 0.1s;
 }
 .hidden-form__table--repair{
-    height: 85%;
+    height: 80vh;
     // transition: height 0.1s;
 }
 .rotated{
+    margin-bottom: 0;
     transform: rotate(180deg);
     transition: transform 0.2s;
 }
@@ -84,6 +80,9 @@
     height: 40px;
     border-radius: 30%;
     background-color: #121D2C;
+    &:hover{
+        background-color: #08101a;
+    }
 }
 
 .menu__button{
@@ -91,6 +90,18 @@
     height: 40px;
     border-radius: 30%;
     background-color: #205ba771;
+    &:hover{
+        background-color: #121D2C;
+    }
+    &--active{
+        width: 40px;
+        height: 40px;
+        border-radius: 30%;
+        background-color: #121D2C;
+        &:hover{
+            background-color: #08101a;
+        }
+    }
 }
 .page__title{
     color: white;
@@ -179,6 +190,7 @@
     }
 }
 .table{
+    text-align: center;
     &__head{
         background-color: #ffffff10;
         padding: 1em;
@@ -190,6 +202,10 @@
     &__row{
         font-weight: 200;
         padding: 1em;
+    }
+    &__status{
+        display: flex;
+        justify-content: center;
     }
 }
 .action-btn{
@@ -227,5 +243,67 @@
     &:hover{
         background-color: #2b3e68af;
     }
+    }
+}
+
+.status__btn{
+    width: 8em;
+    padding: 0.2em 0 0.2em 0;
+    border-radius: 7px;
+    &--planned{
+        background-color: #923E3E;
+    }
+    &--inprogress{
+        background-color: #927B3E;
+    }
+    &--done{
+        background-color: #357037;
+    }
+}
+
+.nav{
+    &__box{
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        width: 5em;
+        transition: width 0.2s;
+    }
+    &__wide{
+        justify-content: start;
+        align-items: start;
+        padding-left: 1.3em;
+        width: 15em;
+        transition: width 0.2s;
+    }
+    &__profile{
+        width: 100%;
+        justify-content: center;
+        transition: justify-center 0.2s;
+        &--wide{
+            justify-content: start;
+            transition: justify-content 0.2s;
+        }
+    }
+    &__btn-box{
+        display: flex;
+        width: 100%;
+        justify-content: center;
+        transition: justify-content 0.2s;
+        &--wide{
+            margin-right: 5em;
+            justify-content: end;
+            transition: justify-content 0.2s;
+        }
+    }
+    &__hidden{
+        display: none;
+        margin-left: 1em;
+        color: white;
+        font-weight: 200;
+        &--wide{
+            display: block;
+        }
     }
 }

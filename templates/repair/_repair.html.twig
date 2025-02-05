@@ -1,17 +1,31 @@
 <tr class="text-center border-t border-gray-700">
     <th class="table__row">{{ loop.index }}</th>
     <td class="table__row">{{ repair.vehicle.brand }} {{ repair.vehicle.model }} | {{ repair.vehicle.numberPlate }}</td>
-    <td class="table__row">{{ repair.part }}</td>
-    <td class="table__row">{{ repair.price }}</td>
-    <td class="table__row">{{ repair.dateRepair|date('d-m-Y') }}</td>
-    <td class="table__row">{% if repair.status == 'planned' %}
-            Oczekujące
+    <td class="table__row">
+    {% set parts = {
+    "mechanic": "Mechaniczne",
+    "body": "Karoseryjne",
+    "electric_electronic": "Układ elektryczny i elektroniczny",
+    "ac_ventilation": "Klimatyzacja i wentylacja",
+    "fluid": "Płyny eksploatacyjne",
+    "wheels": "Opony i felgi",
+    "interior": "Wnętrze",
+    "other": "Inne"
+} %}
+
+{{ parts[repair.part] | default("Nieznana kategoria") }}
     
+    </td>
+    <td class="table__row">{{ repair.price }} <span class="text-gray-400">PLN</span></td>
+    <td class="table__row">{{ repair.dateRepair|date('d-m-Y') }}</td>
+    <td class="table__row table__status">
+        {% if repair.status == 'planned' %}
+            <p class="status__btn status__btn--planned">Oczekujące</p>
         {% elseif repair.status == 'in_progress' %}
-            W trakcie
+            <p class="status__btn status__btn--inprogress">W trakcie</p>
     
         {% elseif repair.status == 'done' %}
-            Zakończone
+            <p class="status__btn status__btn--done">Zakończone</p>
         {% endif %}
     </td>
     <td class="table__row">

@@ -4,7 +4,8 @@
 
 {% block body %}
 <div class="background w-full h-full w:md-2/3 mx-auto">
-        {{ include('shared/_form_nav.html.twig') }}
+        {% embed "shared/_form_nav.html.twig" %}
+        {% endembed %}
 
         <div class="flex flex-col w-10/12 h-screen place-items-center justify-center ml-40 gap-5">
         

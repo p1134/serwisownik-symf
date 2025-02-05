@@ -39,24 +39,19 @@
   display: none;
 }
 
-.content-form {
-  bottom: 0;
-}
-
-.content-form, .form__button {
-  transition: bottom 0.2s;
-}
-
 .content-table {
-  height: 50.5%;
+  height: auto;
+  transition: height 0.2s;
 }
-.content-table--repair {
-  height: 48%;
+
+.content-form {
+  height: auto;
+  transition: height 0.2s;
 }
 
 .hidden-form__form {
-  bottom: -16em;
-  transition: bottom 0.2s;
+  height: 2.5em;
+  transition: height 0.2s;
 }
 
 .hidden-form__table {
@@ -64,10 +59,11 @@
 }
 
 .hidden-form__table--repair {
-  height: 85%;
+  height: 80vh;
 }
 
 .rotated {
+  margin-bottom: 0;
   transform: rotate(180deg);
   transition: transform 0.2s;
 }
@@ -97,12 +93,27 @@
   border-radius: 30%;
   background-color: #121D2C;
 }
+.menu__profile:hover {
+  background-color: #08101a;
+}
 
 .menu__button {
   width: 40px;
   height: 40px;
   border-radius: 30%;
   background-color: rgba(32, 91, 167, 0.4431372549);
+}
+.menu__button:hover {
+  background-color: #121D2C;
+}
+.menu__button--active {
+  width: 40px;
+  height: 40px;
+  border-radius: 30%;
+  background-color: #121D2C;
+}
+.menu__button--active:hover {
+  background-color: #08101a;
 }
 
 .page__title {
@@ -190,6 +201,9 @@
   background-color: #202B39;
 }
 
+.table {
+  text-align: center;
+}
 .table__head {
   background-color: rgba(255, 255, 255, 0.062745098);
   padding: 1em;
@@ -201,6 +215,10 @@
 .table__row {
   font-weight: 200;
   padding: 1em;
+}
+.table__status {
+  display: flex;
+  justify-content: center;
 }
 
 .action-btn {
@@ -239,4 +257,64 @@
 }
 .form__btn:hover {
   background-color: rgba(43, 62, 104, 0.6862745098);
+}
+
+.status__btn {
+  width: 8em;
+  padding: 0.2em 0 0.2em 0;
+  border-radius: 7px;
+}
+.status__btn--planned {
+  background-color: #923E3E;
+}
+.status__btn--inprogress {
+  background-color: #927B3E;
+}
+.status__btn--done {
+  background-color: #357037;
+}
+
+.nav__box {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 5em;
+  transition: width 0.2s;
+}
+.nav__wide {
+  justify-content: start;
+  align-items: start;
+  padding-left: 1.3em;
+  width: 15em;
+  transition: width 0.2s;
+}
+.nav__profile {
+  width: 100%;
+  justify-content: center;
+  transition: justify-center 0.2s;
+}
+.nav__profile--wide {
+  justify-content: start;
+  transition: justify-content 0.2s;
+}
+.nav__btn-box {
+  display: flex;
+  width: 100%;
+  justify-content: center;
+  transition: justify-content 0.2s;
+}
+.nav__btn-box--wide {
+  margin-right: 5em;
+  justify-content: end;
+  transition: justify-content 0.2s;
+}
+.nav__hidden {
+  display: none;
+  margin-left: 1em;
+  color: white;
+  font-weight: 200;
+}
+.nav__hidden--wide {
+  display: block;
 }/*# sourceMappingURL=main.css.map */
