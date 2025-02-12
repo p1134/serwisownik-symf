@@ -50,10 +50,17 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(targetEntity: Repair::class, mappedBy: 'user')]
     private Collection $repair;
 
+    /**
+     * @var Collection<int, Raport>
+     */
+    #[ORM\OneToMany(targetEntity: Raport::class, mappedBy: 'user')]
+    private Collection $raports;
+
     public function __construct()
     {
         $this->vehicles = new ArrayCollection();
         $this->repair = new ArrayCollection();
+        $this->raports = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -197,6 +204,36 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
             // set the owning side to null (unless already changed)
             if ($repair->getUser() === $this) {
                 $repair->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Raport>
+     */
+    public function getRaports(): Collection
+    {
+        return $this->raports;
+    }
+
+    public function addRaport(Raport $raport): static
+    {
+        if (!$this->raports->contains($raport)) {
+            $this->raports->add($raport);
+            $raport->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeRaport(Raport $raport): static
+    {
+        if ($this->raports->removeElement($raport)) {
+            // set the owning side to null (unless already changed)
+            if ($raport->getUser() === $this) {
+                $raport->setUser(null);
             }
         }
 
