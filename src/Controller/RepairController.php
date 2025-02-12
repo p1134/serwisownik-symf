@@ -38,7 +38,6 @@ class RepairController extends AbstractController
 
         $filters = [];
         $filters = $request->query->all('filter');
-        // dump($filters);
 
         if($form->isSubmitted() && $form->isValid()){
             $repairs = $form->getData();

@@ -249,7 +249,44 @@ class HomeController extends AbstractController
         $repairsCBP = $repairs->getCountByPart($user);
         $repairCBPArray = [];
         foreach ($repairsCBP as $item) {
-            $repairsCBPArray[$item['Part']] = $item['Count'] ;
+            switch($item['Part']){
+                
+                case 'mechanic':
+                    $repairsCBPArray['Mechaniczne'] = $item['Count'];
+                break;
+                    
+                case 'body':
+                    $repairsCBPArray['Karoseryjne'] = $item['Count'];
+                break;
+
+                case 'electric_electronic':
+                    $repairsCBPArray['Układ elektryczny i elektroniczny'] = $item['Count'];
+                break;
+
+                case 'ac_ventilation':
+                    $repairsCBPArray['Klimatyzacja i wentylacja'] = $item['Count'];
+                break;
+
+                case 'fluid':
+                    $repairsCBPArray['Płyny eksploatacyjne'] = $item['Count'];
+                break;
+
+                case 'wheels':
+                    $repairsCBPArray['Opony i felgi'] = $item['Count'];
+                break;
+
+                case 'interior':
+                    $repairsCBPArray['Wnętrze'] = $item['Count'];
+                break;
+
+                case 'other':
+                    $repairsCBPArray['Inne'] = $item['Count'];
+                break;
+
+                default:
+                    $repairsCBPArray[$item['Part']] = $item['Count'];
+                break;
+            }
         }
         $LabelsCBP = array_keys($repairsCBPArray);
         $DataCBP = array_values($repairsCBPArray);

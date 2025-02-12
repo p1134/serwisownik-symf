@@ -4,8 +4,12 @@
             <i class="nav__btn fa-solid fa-bars-staggered text-white text-xl cursor-pointer"></i>
         </div>
         <div class="nav__profile flex place-items-center">
-            <button class="menu__profile ring-gray-700 ring-1"><i class="fa-regular fa-user text-white text-xl"></i></button>
-            <p class="nav__hidden">{{ user }}</p>
+            <a href="{{ path('app_profile') }}" class="flex place-items-center">
+                <button class="menu__profile ring-gray-700 ring-1"><i class="fa-regular fa-user text-white text-xl"></i></button>
+            </a>
+            <a href="{{ path('app_profile') }}" class="flex place-items-center">
+                <p class="nav__hidden">{{ user }}</p>
+            </a>
         </div>
     </div>
     <div class="flex flex-col justify-items-center gap-8">

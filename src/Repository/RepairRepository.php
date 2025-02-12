@@ -90,6 +90,10 @@ class RepairRepository extends ServiceEntityRepository
             $query->andWhere('r.vehicle IN (:vehicle)')
                 ->setParameter('vehicle', $filters['vehicle']);
         }
+        if(!empty($filters['part'])){
+            $query->andWhere('r.part = :part')
+            ->setParameter('part', $filters['part']);
+        }
 
         switch($sort){
             case 'alphabetASC':
@@ -117,29 +121,33 @@ class RepairRepository extends ServiceEntityRepository
         return $query->getQuery()->getResult();
     }
 
-    public function findAllByFilter($user, array $filters){
-        $query = $this->createQueryBuilder('r');
+    // public function findAllByFilter($user, array $filters){
+    //     $query = $this->createQueryBuilder('r');
 
-        if(isset($filters['statusFilter'])){
-            $query->andWhere('r.status = :status')
-            ->setParameter('status', $filters['statusFilter']);
-        }
+    //     if(isset($filters['statusFilter'])){
+    //         $query->andWhere('r.status = :status')
+    //         ->setParameter('status', $filters['statusFilter']);
+    //     }
 
-        if(isset($filters['vehicleFilter'])){
-            $query->leftJoin('r.vehicle','v')
-            ->addselect( 'v')
-            ->where('v.onwer = :ownerId')
-            ->setParameter('ownerId', $user->getId());
-        }
-        if(isset($filters['dateRepairFilter'])){
-            $query->andWhere('r.dateRepair BETWEEN :start AND :end')
-            ->setParameter('start', $filters['dateRepair']['start'])
-            ->setParameter('end', $filters['dateRepair']['end']);
-        }
+    //     if(isset($filters['vehicleFilter'])){
+    //         $query->leftJoin('r.vehicle','v')
+    //         ->addselect( 'v')
+    //         ->where('v.onwer = :ownerId')
+    //         ->setParameter('ownerId', $user->getId());
+    //     }
+    //     if(isset($filters['dateRepairFilter'])){
+    //         $query->andWhere('r.dateRepair BETWEEN :start AND :end')
+    //         ->setParameter('start', $filters['dateRepair']['start'])
+    //         ->setParameter('end', $filters['dateRepair']['end']);
+    //     }
+    //     if(isset($filters['partFilter'])){
+    //         $query->andWhere('r.part = :part')
+    //         ->setParameter('part', $filters['partFilter']);
+    //     }
 
-        return $query->getQuery()->getResult();
+    //     return $query->getQuery()->getResult();
         
-    }
+    // }
 
     public function repairChart($user){
         $now = new \DateTime('now');
@@ -287,10 +295,10 @@ class RepairRepository extends ServiceEntityRepository
             ->groupBy('r.part')
             ->getQuery()
             ->getResult();
+            // dd($query);
             return $query;
             
 
-        // $mechanic = $query->andWhere('r.part = mechanic')
     ;}
 
     public function mostRepairs($user){

@@ -21,11 +21,37 @@
          <label>
             <input type="checkbox" name="filter[month][]" value="previousMonth" class="mr-1" {% if 'previousMonth' in (filters.month|default([])) %}checked{% endif %}>Poprzedni
         </label>
+        <p class="mt-2">Rodzaj naprawy</p>
+        <div class="w-38 border border-gray-400"></div>
+         <label>
+            <input type="checkbox" name="filter[part][]" value="mechanic" class="mr-1" {% if 'mechanic' in (filters.part|default([])) %}checked{% endif %}>Mechaniczne
+        </label>
+         <label>
+            <input type="checkbox" name="filter[part][]" value="body" class="mr-1" {% if 'body' in (filters.part|default([])) %}checked{% endif %}>Karoseryjne
+        </label>
+         <label>
+            <input type="checkbox" name="filter[part][]" value="electric_electronic" class="mr-1" {% if 'electric_electronic' in (filters.part|default([])) %}checked{% endif %}>Układ elektryczny i elektroniczny
+        </label>
+         <label>
+            <input type="checkbox" name="filter[part][]" value="ac_ventilation" class="mr-1" {% if 'ac_ventilation' in (filters.part|default([])) %}checked{% endif %}>Wentylacja i klimatyzacja
+        </label>
+         <label>
+            <input type="checkbox" name="filter[part][]" value="fluid" class="mr-1" {% if 'fluid' in (filters.part|default([])) %}checked{% endif %}>Płyny eksploatacyjne
+        </label>
+         <label>
+            <input type="checkbox" name="filter[part][]" value="wheels" class="mr-1" {% if 'wheels' in (filters.part|default([])) %}checked{% endif %}>Opony i felgi
+        </label>
+         <label>
+            <input type="checkbox" name="filter[part][]" value="interior" class="mr-1" {% if 'interior' in (filters.part|default([])) %}checked{% endif %}>Wnętrze
+        </label>
+         <label>
+            <input type="checkbox" name="filter[part][]" value="other" class="mr-1" {% if 'other' in (filters.part|default([])) %}checked{% endif %}>Inne
+        </label>
         <p class="mt-2">Pojazd</p>
         <div class="w-38 border border-gray-400"></div>
         {% if repairs|length > 0 %}
         {% for vehicle in vehicles %}
-         <label class="flex">
+         <label>
             <input type="checkbox" name="filter[vehicle][]" value="{{ vehicle.id }}" class="mr-1" {% if vehicle.id in (filters.vehicle|default([])) %}checked{% endif %}>{{ vehicle.brand }} {{ vehicle.model }} | {{ vehicle.numberPlate }}
         </label>
         {% endfor %}

@@ -1,16 +1,24 @@
 {% extends 'base.html.twig' %}
 
-{# {% block title %}Hello HomeController!{% endblock %} #}
-
 {% block body %}
-<div class="grid grid-cols-8 w-full h-full w:md-2/3 mx-auto ">
+<div class="w-full h-screen w:md-2/3 mx-auto flex overflow-hidden">
+    <div class="nav">
         {{ include('shared/_form_nav.html.twig') }}
-        
-    <div class="col-span-6 grid grid-rows-7 w-full">
-        <div class="row-span-4 col-span-6" data-sort="vehicle">
-    
-        </div>
+    </div>
+    <div class="flex w-10/12 h-screen place-items-start justify-between ml-40 gap-10">
+        <div class="flex flex-col w-1/3 h-screen place-items-start justify-between">
+            <div class="profile__box main__box w-full h-screen mt-10 mb-10 ring-1 ring-gray-700 rounded-xl flex flex-col">
 
+            </div>
+        </div>
+        <div class="right__box h-screen w-full mt-10 mb-10 flex flex-col gap-10">
+            <div class="main__box raport__box flex w-full h-1/2 ring-1 ring-gray-700 rounded-xl">
+                <button class="text-white">Generuj raport</button>
+            </div>
+            <div class="main__box logo__box flex w-full h-1/3 ring-1 ring-gray-700 rounded-xl">
+            
+            </div>
+        </div>
     </div>
 </div>
 {% endblock %}
