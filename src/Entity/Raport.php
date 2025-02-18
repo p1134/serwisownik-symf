@@ -15,7 +15,7 @@ class Raport
     private ?int $id = null;
 
     #[ORM\Column(type: Types::BLOB)]
-    private $file;
+    private $pdf;
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]
     private ?\DateTimeInterface $dateCreate = null;
@@ -24,19 +24,22 @@ class Raport
     #[ORM\JoinColumn(nullable: false)]
     private ?User $user = null;
 
+    #[ORM\Column(length: 255)]
+    private ?string $filename = null;
+
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getFile()
+    public function getPdf()
     {
-        return $this->file;
+        return $this->pdf;
     }
 
-    public function setFile($file): static
+    public function setPdf($pdf): static
     {
-        $this->file = $file;
+        $this->pdf = $pdf;
 
         return $this;
     }
@@ -61,6 +64,18 @@ class Raport
     public function setUser(?User $user): static
     {
         $this->user = $user;
+
+        return $this;
+    }
+
+    public function getFilename(): ?string
+    {
+        return $this->filename;
+    }
+
+    public function setFilename(string $filename): static
+    {
+        $this->filename = $filename;
 
         return $this;
     }

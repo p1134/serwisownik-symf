@@ -5,7 +5,7 @@
         </div>
         <div class="nav__profile flex place-items-center">
             <a href="{{ path('app_profile') }}" class="flex place-items-center">
-                <button class="menu__profile ring-gray-700 ring-1"><i class="fa-regular fa-user text-white text-xl"></i></button>
+                <button class="menu__profile ring-gray-700 ring-1 flex place-content-center place-items-center"><img class="w-8" src="{{ asset('img/user.png') }}" alt=""></button>
             </a>
             <a href="{{ path('app_profile') }}" class="flex place-items-center">
                 <p class="nav__hidden">{{ user }}</p>

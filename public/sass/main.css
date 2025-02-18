@@ -318,4 +318,65 @@
 }
 .nav__hidden--wide {
   display: block;
+}
+
+.profile__icon i {
+  color: #416DAE;
+  font-size: 1.2rem;
+}
+.profile__icon p {
+  color: white;
+  font-weight: 200;
+  font-size: 1rem;
+}
+.profile__icon label {
+  color: white;
+  font-weight: 200;
+  font-size: 1rem;
+}
+.profile__btn {
+  padding: 0.5em 0;
+  width: 11em;
+  background-color: #203D62;
+  color: white;
+  font-weight: 200;
+}
+.profile__btn:hover {
+  background-color: #416DAE;
+}
+
+.toggle-checkbox {
+  position: absolute;
+  width: 0;
+  height: 0;
+  visibility: hidden;
+}
+.toggle-btn {
+  display: block;
+  position: relative;
+  width: 2em;
+  height: 1em;
+  background-color: gray;
+  border-radius: 30px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+.toggle-btn::before {
+  content: "";
+  position: absolute;
+  top: 0.1em;
+  left: 0.1em;
+  width: 0.8em;
+  height: 0.8em;
+  border-radius: 50%;
+  background-color: lightgray;
+  transition: transform 0.3s;
+}
+
+.toggle-checkbox:checked + .toggle-btn {
+  background-color: #416DAE;
+}
+
+.toggle-checkbox:checked + .toggle-btn::before {
+  transform: translateX(1em);
 }/*# sourceMappingURL=main.css.map */

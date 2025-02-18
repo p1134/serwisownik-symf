@@ -7,16 +7,60 @@
     </div>
     <div class="flex w-10/12 h-screen place-items-start justify-between ml-40 gap-10">
         <div class="flex flex-col w-1/3 h-screen place-items-start justify-between">
-            <div class="profile__box main__box w-full h-screen mt-10 mb-10 ring-1 ring-gray-700 rounded-xl flex flex-col">
+            <div class="profile__box main__box w-full h-screen mt-10 mb-10 ring-1 ring-gray-700 rounded-xl flex flex-col justify-evenly">
+                <div class="w-100 flex justify-center">
+                    <img src="{{ asset('img/user2.png') }}" alt="" class="w-28">
+                </div>
 
+                <div class="flex flex-col ml-10 gap-6">
+                    <div class="profile__icon flex place-items-center gap-4">
+                        <i class="fa-solid fa-envelope"></i>
+                        <p>{{ user }}</p>
+                    </div>
+                    <div class="profile__icon flex place-items-center gap-4">
+                        <i class="fa-solid fa-pencil"></i>
+                        <p>Imię</p>
+                    </div>
+                    <div class="profile__icon flex place-items-center gap-4">
+                        <i class="fa-solid fa-pencil"></i>
+                        <p>Nazwisko</p>
+                    </div>
+                    <div class="profile__icon flex place-items-center gap-4">
+                        <i class="fa-solid fa-comment-sms"></i>
+                        <p>Numer telefonu</p>
+                    </div>
+                    <div class="profile__icon flex place-items-center">
+                        <label class="flex justify-center place-items-center gap-4">
+                        <input class="toggle-checkbox" type="checkbox" name="" id="">
+                        <span class="toggle-btn"></span>
+                        <p class="cursor-pointer">Powiadomienia SMS</p>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="flex flex-col justify-center place-items-center gap-4">
+                    <a href=""><button class="profile__btn rounded-md">Zmień adres email</button></a>
+                    <a href=""><button class="profile__btn rounded-md">Zmień hasło</button></a>
+                </div>
             </div>
         </div>
         <div class="right__box h-screen w-full mt-10 mb-10 flex flex-col gap-10">
-            <div class="main__box raport__box flex w-full h-1/2 ring-1 ring-gray-700 rounded-xl">
-                <button class="text-white">Generuj raport</button>
+            <div class="main__box raport__box flex flex-col w-full h-1/2 ring-1 ring-gray-700 rounded-xl justify-between p-8">
+                <div class="raport__box-content overflow-y-scroll flex flex-col gap-1">
+                    <table>
+                    {% for raport in raports %}
+                        <tr class="flex gap-2 font-thin place-items-center">
+                            <td><i class="fa-solid fa-file-pdf text-gray-200"></i></td>
+                            <td class="text-white w-2/5">{{ raport.filename }}</td>
+                            <td class="text-gray-300">{{ raport.dateCreate|date('d-m-Y') }}</td>
+                        </tr>
+                    {% endfor %}
+                    </table>
+                </div>
+                <a href="{{ path('app_profile_raport') }}" class="w-full mt-6"><button class="profile__btn w-full rounded-md">Generuj raport</button></a>
             </div>
-            <div class="main__box logo__box flex w-full h-1/3 ring-1 ring-gray-700 rounded-xl">
-            
+            <div class="main__box logo__box flex w-full h-1/3 ring-1 ring-gray-700 rounded-xl justify-center place-items-center">
+                <img src="{{ asset('img/logo.png') }}" alt="" class="h-4/5">
             </div>
         </div>
     </div>

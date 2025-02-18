@@ -54,13 +54,32 @@ class RepairRepository extends ServiceEntityRepository
         return $query;
     }
 
+    
     public function findAllByVehicle($user): QueryBuilder{
         return $this->findAllQuery(withVehicle: true)
-            ->where('v.owner = :ownerId')
+        ->where('v.owner = :ownerId')
             ->setParameter('ownerId', $user->getId());
-    }
+        }
+        
+        public function getReport($user): array{
 
-    public function findAllBySort($user, $sort, array $filters){
+            $now = new \DateTime('now');
+            $currentStart = clone($now)->modify('first day of this month')->setTime(0, 0);
+            $currentEnd = clone($now)->modify('last day of this month')->setTime(23, 59);
+            
+            $query = $this->findAllQuery(withVehicle: true, withPart: true, withDateRepair: true, withPrice: true, withDescription:true )
+            ->addSelect('v.brand')
+            ->addSelect('v.model')
+            ->addSelect('v.numberPlate')
+            ->where('r.dateRepair BETWEEN :start AND :end')
+            ->setParameter('start', $currentStart)
+            ->setParameter('end', $currentEnd)
+            ->getQuery();
+            return $query->getResult();
+            // dd($query);
+
+        }
+        public function findAllBySort($user, $sort, array $filters){
         
         $query = $this->findAllByVehicle($user);
         if(!empty($filters['status'])){
