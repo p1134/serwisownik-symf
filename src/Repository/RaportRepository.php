@@ -20,7 +20,7 @@ class RaportRepository extends ServiceEntityRepository
     public function getAllRaports($user){
         $query = $this->createQueryBuilder('r');
         $query->leftJoin('r.user', 'u')
-            ->addSelect('r.pdf', 'r.dateCreate', 'r.filename')
+            ->addSelect('r.pdf', 'r.dateCreate', 'r.filename', 'r.id')
             ->addSelect('u')
             ->where('u.id = :userID')
             ->setParameter('userID', $user->getId())

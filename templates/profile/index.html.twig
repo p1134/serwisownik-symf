@@ -50,8 +50,9 @@
                     <table>
                     {% for raport in raports %}
                         <tr class="flex gap-2 font-thin place-items-center">
-                            <td><i class="fa-solid fa-file-pdf text-gray-200"></i></td>
-                            <td class="text-white w-2/5">{{ raport.filename }}</td>
+                            <td class="w-1/2">
+                                <a href="{{ path('app_profile_raport_download', {'id': raport.id}) }}" class="raport cursor-pointer text-gray-200"><i class="fa-solid fa-file-pdf mr-4"></i>{{ raport.filename }}</a>
+                            </td>
                             <td class="text-gray-300">{{ raport.dateCreate|date('d-m-Y') }}</td>
                         </tr>
                     {% endfor %}

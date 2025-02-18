@@ -376,3 +376,10 @@
 .toggle-checkbox:checked + .toggle-btn::before{
     transform: translateX(1em);
 }
+.raport{
+    transition: color 0.2s;
+}
+
+.raport:hover{
+color: #416DAE;
+}

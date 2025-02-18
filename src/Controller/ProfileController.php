@@ -20,6 +20,8 @@ class ProfileController extends AbstractController
         $user = $this->getUser();
         $raport = $raports->getAllRaports($user);
 
+
+
         return $this->render('profile/index.html.twig', [
             'controller_name' => 'ProfileController',
             'user' => $user->getUserIdentifier(),
@@ -144,6 +146,30 @@ class ProfileController extends AbstractController
                 'user' => $user->getUserIdentifier(),
                 'data_sort' == null,
             ]);
-    }
+        }
+           
+                
+            
 
-}
+    #[Route('profile/raport/download/{id}', name: 'app_profile_raport_download')]
+    public function downloadRaport(int $id, EntityManagerInterface $entityManager){
+        $rapport = $entityManager->getRepository(Raport::class)->find($id);
+
+        if(!$rapport || !$rapport->getPdf()){
+            throw $this->createNotFoundException('Plik PDF nie został znaleziony');
+        }
+
+        $pdf = $rapport->getPdf();
+        $pdf = stream_get_contents($pdf);
+        if (!is_string($pdf)) {
+            throw $this->createNotFoundException('Zawartość pliku PDF jest nieprawidłowa.');
+        }
+        
+        $response = new Response($pdf);
+        $response->headers->set('Content-Type', 'application/pdf');
+        $response->headers->set('Content-Disposition', 'attachment; filename='.$rapport->getFilename());
+
+        return $response;
+    
+
+}}
