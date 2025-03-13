@@ -247,7 +247,7 @@ class HomeController extends AbstractController
         $chartCBP = $chartBuilder->createChart(Chart::TYPE_BAR);
         // $repairsSBP = $repairs->getSumByPart($user);
         $repairsCBP = $repairs->getCountByPart($user);
-        $repairCBPArray = [];
+        $repairsCBPArray = [];
         foreach ($repairsCBP as $item) {
             switch($item['Part']){
                 
@@ -300,7 +300,7 @@ class HomeController extends AbstractController
                 'borderRadius' => 10,
                 'data' => $DataCBP,
                 'label' => 'Naprawy według rodzaju',
-                'backgroundColor' => '#4049FF',
+                'backgroundColor' => '#416DAE',
                 'borderWidth' => '2',
                 'color' => 'white',
                 ]],

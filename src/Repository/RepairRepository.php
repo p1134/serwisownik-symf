@@ -74,6 +74,8 @@ class RepairRepository extends ServiceEntityRepository
             ->where('r.dateRepair BETWEEN :start AND :end')
             ->setParameter('start', $currentStart)
             ->setParameter('end', $currentEnd)
+            ->andwhere('v.owner = :ownerId')
+            ->setParameter('ownerId', $user->getId())
             ->getQuery();
             return $query->getResult();
             // dd($query);

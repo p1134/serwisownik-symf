@@ -56,6 +56,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(targetEntity: Raport::class, mappedBy: 'user')]
     private Collection $raports;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $name = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $surname = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?int $phoneNumber = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?bool $sms = null;
+
     public function __construct()
     {
         $this->vehicles = new ArrayCollection();
@@ -67,12 +79,20 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         return $this->id;
     }
-
+    /**
+     * A visual identifier that represents this user.
+     *
+     * @see UserInterface
+     */
     public function getEmail(): ?string
     {
         return $this->email;
     }
-
+    /**
+     * A visual identifier that represents this user.
+     *
+     * @see UserInterface
+     */
     public function setEmail(string $email): static
     {
         $this->email = $email;
@@ -236,6 +256,54 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
                 $raport->setUser(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getName(): ?string
+    {
+        return $this->name;
+    }
+
+    public function setName(?string $name): static
+    {
+        $this->name = $name;
+
+        return $this;
+    }
+
+    public function getSurname(): ?string
+    {
+        return $this->surname;
+    }
+
+    public function setSurname(?string $surname): static
+    {
+        $this->surname = $surname;
+
+        return $this;
+    }
+
+    public function getPhoneNumber(): ?int
+    {
+        return $this->phoneNumber;
+    }
+
+    public function setPhoneNumber(?int $phoneNumber): static
+    {
+        $this->phoneNumber = $phoneNumber;
+
+        return $this;
+    }
+
+    public function isSms(): ?bool
+    {
+        return $this->sms;
+    }
+
+    public function setSms(?bool $sms): static
+    {
+        $this->sms = $sms;
 
         return $this;
     }

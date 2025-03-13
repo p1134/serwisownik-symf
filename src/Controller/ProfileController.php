@@ -2,24 +2,37 @@
 
 namespace App\Controller;
 
+use TCPDF;
+use App\Entity\User;
 use App\Entity\Raport;
+use App\Form\ProfileType;
+use App\Form\changeEmailType;
+use App\Security\EmailVerifier;
+use App\Form\ChangePasswordType;
+use Symfony\Component\Mime\Email;
+use App\Repository\UserRepository;
+use Symfony\Component\Mime\Address;
 use App\Repository\RaportRepository;
 use App\Repository\RepairRepository;
 use App\Repository\VehicleRepository;
 use Symfony\Component\Asset\Packages;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Bridge\Twig\Mime\TemplatedEmail;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
+use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 
 class ProfileController extends AbstractController
 {
     #[Route('/profile', name: 'app_profile')]
-    public function index(RaportRepository $raports): Response
+    public function index(RaportRepository $raports, Request $request, EntityManagerInterface $entityManager): Response
     {
         $user = $this->getUser();
-        $raport = $raports->getAllRaports($user);
-
 
 
         return $this->render('profile/index.html.twig', [
@@ -27,17 +40,21 @@ class ProfileController extends AbstractController
             'user' => $user->getUserIdentifier(),
             'data_sort' == null,
             'raports' => $raports->getAllRaports($user),
+            'form_type' => '',
         ]);
     }
 
     #[Route('profile/raport', name: 'app_profile_raport')]
-    public function newRaport(Packages $assets, EntityManagerInterface $entityManager, RaportRepository $raports, VehicleRepository $vehicles, RepairRepository $repairs): response
+    public function newRaport(EntityManagerInterface $entityManager, RaportRepository $raports, RepairRepository $repairs): response
     {
         
         $user = $this->getUser();
+        if(!$user instanceof User){
+            throw new \LogicException('Użytkownik nie jest instancji User.');
+        }
         $date = new \DateTime('now');
     
-            $pdf = new \TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', true);
+            $pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', true);
 
             
             $logo = $this->getParameter('kernel.project_dir') . '/public/img/logo.png';
@@ -144,7 +161,7 @@ class ProfileController extends AbstractController
             return $this->render('profile/index.html.twig', [
                 'controller_name' => 'ProfileController',
                 'user' => $user->getUserIdentifier(),
-                'data_sort' == null,
+                'data_sort' => null,
             ]);
         }
            
@@ -172,4 +189,145 @@ class ProfileController extends AbstractController
         return $response;
     
 
-}}
+}
+
+#[Route('/profile/{user}/change-email', name: 'app_profile_change_email')]
+public function editProfile(Request $request, EntityManagerInterface $entityManager, RaportRepository $raports, UserPasswordHasherInterface $userPass){
+
+    $user = $this->getUser();
+
+    if(!$user){
+        $this->addFlash('error', 'Uzytkownik niezalogowany');
+        return $this->redirectToRoute('app_login');
+    }
+    if (!$user instanceof User) {
+        throw new \LogicException('Oczekiwana instancja klasy User');
+    }
+    
+    $form = $this->createForm(changeEmailType::class);
+    $form->handleRequest($request);
+
+    if($form->isSubmitted() && $form->isValid()){
+        $data = $form->getData();
+        
+        if($user->getUserIdentifier() !== $data['email']){
+            $this->addFlash('error', 'Niepoprawny adres email');
+            return $this->redirectToRoute('app_profile_change_email', [
+                'user' => $user->getUserIdentifier(),
+            ]);
+        }
+
+        if($userPass->isPasswordValid($user, $data['password'])){
+            $user->setEmail($data['newEmail']);
+        }
+        
+        else{
+            $this->addFlash('error', 'Niepoprawne hasło');
+            return $this->redirectToRoute('app_profile_change_email', [
+                'user' => $user->getUserIdentifier(),
+            ]);
+        }
+        
+        $entityManager->persist($user);
+        $entityManager->flush();
+        
+        $this->addFlash('success', 'Adres email został zmieniony');
+        return $this->redirectToRoute('app_login');
+    }
+
+
+    // $currentUser = $this->getUser()->getUserIdentifier();
+    // $user = $entityManager->getRepository(User::class)->find($currentUser);
+
+    // $form = $this->createForm(changeEmailType::class);
+    // $form->handleRequest($request);
+
+    // if($form->isSubmitted() && $form->isValid()){
+
+    //     $data = $form->getData();
+
+    //     if($user->getUserIdentifier() !== $data['email']){
+    //         $this->addFlash('error', 'Niepoprawny adres email');
+    //         return $this->redirectToRoute('app_profile_change_email');
+    //     }
+    //     elseif($data['password' !== $passwordHasher->isPasswordValid($user, $data['password'])]){
+    //         $this->addFlash('error', 'Niepoprawne hasło');
+    //         return $this->redirectToRoute('app_profile_change_email');
+    //     }
+
+    //     $user->setEmail($data['email']);
+        
+    //     $this->addFlash('success', 'Adres email został zaktualizowany');
+    // }
+
+    return $this->render('profile/index.html.twig', [
+        'form_type' => 'edit_email',
+        'form' => $form->createView(),
+        'user' => $user->getUserIdentifier(),
+        'raports' => $raports->getAllRaports($user),
+    ]);
+}
+
+
+public function __construct(private EmailVerifier $emailVerifier)
+{
+}
+
+#[Route('/send', 'app_send_reset_link')]
+    public function sendResetLink(MailerInterface $mailer){
+
+        $user = $this->getUser();
+        $token = bin2hex(random_bytes(16));
+        $link = $this->generateUrl('app_form_change_password', ['token' => $token, 'user' => $user->getUserIdentifier()], UrlGeneratorInterface::ABSOLUTE_URL);
+
+        if(!$user){
+            $this->addFlash('error', 'Uzytkownik niezalogowany');
+            return $this->redirectToRoute('app_login');
+        }
+        if (!$user instanceof User) {
+            throw new \LogicException('Oczekiwana instancja klasy User');
+        }
+
+        $email = (new Email())
+            ->from('weryfikacja@serwisownik.com.pl')
+            ->to((string)$user->getEmail())
+            ->subject(('Resetowanie hasła'))
+            ->html("<p>Aby zresetować hasło, kliknij <a href=\"$link\">tutaj</a></p>");
+
+        $mailer->send($email);
+        $this->addFlash('success', 'Wiadomość potwierdzająca zmianę hasła została wysłana na adres email');
+        
+        return $this->redirectToRoute('app_profile');
+        
+
+    }
+
+    #[Route('/password/{user}/change', 'app_form_change_password')]
+    public function resetPassword(Request $request, EntityManagerInterface $entityManager, UserPasswordHasherInterface $userPass){
+        $user = $this->getUser();
+
+        $form = $this->createForm(ChangePasswordType::class);
+        $form->handleRequest($request);
+        
+        if($form->isSubmitted() && $form->isValid()){
+            $data = $form->getData();
+            
+            if(!$user instanceof User){
+                throw new \LogicException('Oczekiwana instancja klasy User');
+            }
+            if($userPass->isPasswordValid($user, $data['password'])){
+                $user->setPassword($userPass->hashPassword($user, $data['plainPassword']));
+            }
+            $entityManager->persist($user);
+            $entityManager->flush();
+            
+            $this->addFlash('success', 'Hasło zostało zmienione');
+            return $this->redirectToRoute('app_profile');
+
+        }
+        return $this->render('profile/_change_password.html.twig', [
+            'form' => $form->createView(),
+            'user' => $user->getUserIdentifier()
+        ]);
+    }
+}
