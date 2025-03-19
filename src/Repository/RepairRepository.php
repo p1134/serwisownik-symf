@@ -58,7 +58,8 @@ class RepairRepository extends ServiceEntityRepository
     public function findAllByVehicle($user): QueryBuilder{
         return $this->findAllQuery(withVehicle: true)
         ->where('v.owner = :ownerId')
-            ->setParameter('ownerId', $user->getId());
+            ->setParameter('ownerId', $user->getId())
+            ->orderBy('r.dateRepair', 'DESC');
         }
         
         public function getReport($user): array{
@@ -222,23 +223,22 @@ class RepairRepository extends ServiceEntityRepository
         // $currentMonth = $this->currentMonth($user);
             $currentMonth = $this->currentMonth($user)
                 ->select('COUNT(r.price) as Current')
-                ->addSelect('r.dateRepair as Month')
-                ->groupBy('Month')
+                ->addSelect("DATE_FORMAT(r.dateRepair, '%Y-%m') as Date") 
+                ->groupBy('Date')
                 ->getQuery()
                 ->getResult();
 
             $previousMonth = $this->previousMonth($user)
                 ->select('COUNT(r.price) as Previous')
-                ->addSelect('r.dateRepair as Month')
-                ->groupBy('Month')
+                ->addSelect("DATE_FORMAT(r.dateRepair, '%Y-%m') as Date") 
+                ->groupBy('Date')
                 ->getQuery()
                 ->getResult();
 
         
 
         $currentMonth = !empty($currentMonth) && isset($currentMonth[0])  ? intval($currentMonth[0]['Current']) : 0;
-        $previousMonth = !empty($currentMonth) && isset($previousMonth[0]) ? intval($previousMonth[0]['Previous']) : 0;
-
+        $previousMonth = !empty($previousMonth) && isset($previousMonth[0]) ? intval($previousMonth[0]['Previous']) : 0;
 
         return $cvp = ['Current' => $currentMonth, 'Previous' => $previousMonth];
     }
@@ -246,15 +246,17 @@ class RepairRepository extends ServiceEntityRepository
     public function CVPCost($user){
         $currentMonth = $this->currentMonth($user)
             ->select('SUM(r.price) as Current')
-            ->addSelect('r.dateRepair as Month')
-            ->groupBy('Month')
+            ->addSelect("DATE_FORMAT(r.dateRepair, '%Y-%m') as Date") 
+            ->groupBy('Date')
             ->getQuery()
             ->getResult();
 
+
+
         $previousMonth = $this->previousMonth($user)
             ->select('SUM(r.price) as Previous')
-            ->addSelect('r.dateRepair as Month')
-            ->groupBy('Month')
+            ->addSelect("DATE_FORMAT(r.dateRepair, '%Y-%m') as Date") 
+            ->groupBy('Date')
             ->getQuery()
             ->getResult();
 
@@ -262,7 +264,6 @@ class RepairRepository extends ServiceEntityRepository
 
         $currentMonth = !empty($currentMonth) && isset($currentMonth[0])  ? intval($currentMonth[0]['Current']) : 0;
         $previousMonth = !empty($currentMonth) && isset($previousMonth[0]) ? intval($previousMonth[0]['Previous']) : 0;
-
 
         return $cvp = ['Current' => $currentMonth, 'Previous' => $previousMonth];
     }

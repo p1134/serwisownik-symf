@@ -14,11 +14,13 @@ document.addEventListener("DOMContentLoaded", () => {
     const button = document.querySelector(".form__button");
     const box = document.querySelector(".content-form");
     const form = document.querySelector(".form__add");
+    const main = document.querySelector(".main-container")
 
     function toggleForm(){
         box.classList.toggle("hidden-form__form");
         form.classList.toggle("hidden");
         button.classList.toggle("rotated");
+        // main.classList.toggle("hidden-form__contents");
     }
     button.addEventListener("click", toggleForm);
 })

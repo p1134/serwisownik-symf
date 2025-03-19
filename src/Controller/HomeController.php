@@ -114,10 +114,14 @@ class HomeController extends AbstractController
         $decreaseRepairs = null;
         $nothing = null;
         $cvp = $repairs->CVPRepairs($user);
-        if($cvp['Current'] >= $cvp['Previous'] && $cvp['Previous'] != null){
+
+        if($cvp['Current'] >= $cvp['Previous'] && $cvp['Previous'] != null || $cvp['Previous'] != 0){
             $growthRepairs = round(abs((($cvp['Current']-$cvp['Previous'])/$cvp['Previous'])*100), 1);
         }
-        elseif($cvp['Current'] < $cvp['Previous'] && $cvp['Previous'] != null){
+        elseif($cvp['Current'] > $cvp['Previous'] && $cvp['Previous'] = null || $cvp['Previous'] == 0){
+            $growthRepairs = round(abs((1)*100), 1);
+        }
+        elseif($cvp['Current'] < $cvp['Previous'] && $cvp['Previous'] != null || $cvp['Previous'] != 0){
             $decreaseRepairs = round(abs((($cvp['Current']-$cvp['Previous'])/$cvp['Previous'])*100),1);
         }
         elseif($cvp['Current'] == null && $cvp['Previous'] == null){
@@ -125,7 +129,7 @@ class HomeController extends AbstractController
         }
 
         else{
-            $decreaseRepairs = round(abs((($cvp['Current']-$cvp['Previous'])/$cvp['Current'] ? 0 : $cvp['Previous'])*100), 1);
+            $decreaseRepairs = round(abs((($cvp['Current'] - $cvp['Previous']) / ($cvp['Current'] != 0 ? $cvp['Current'] : 1)) * 100), 1);
         }
 
 
@@ -134,14 +138,18 @@ class HomeController extends AbstractController
         $nothingCost = null;
 
         $cvpCost = $repairs->CVPCost($user);
-        if($cvpCost['Current'] >= $cvpCost['Previous'] && $cvpCost['Previous'] != null){
+
+        if($cvpCost['Current'] >= $cvpCost['Previous'] && $cvpCost['Previous'] != null || $cvpCost['Previous'] != 0){
             $growthCost = round(abs((($cvpCost['Current']-$cvpCost['Previous'])/$cvpCost['Previous'])*100), 1);
         }
-        elseif($cvpCost['Current'] < $cvpCost['Previous'] && $cvpCost['Previous'] != null){
+        elseif($cvpCost['Current'] < $cvpCost['Previous'] && $cvpCost['Previous'] != null || $cvpCost['Previous'] != 0){
             $decreaseCost = round(abs((($cvpCost['Current']-$cvpCost['Previous'])/$cvpCost['Previous'])*100), 1);
         }
         elseif($cvpCost['Current'] == 0 && $cvpCost['Previous'] == 0){
             $nothingCost = 0;
+        }
+        elseif($cvpCost['Current'] > $cvpCost['Previous'] && $cvpCost['Previous'] = null || $cvpCost['Previous'] == 0){
+            $growthCost = round(abs((1)*100), 1);
         }
         else{
             $decreaseCost = round(abs((($cvpCost['Current']-$cvpCost['Previous'])/$cvpCost['Current'])*100), 1);
