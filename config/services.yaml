@@ -20,5 +20,10 @@ services:
             - '../src/Entity/'
             - '../src/Kernel.php'
 
+    App\Service\SmsService:
+        arguments:
+            $sid: '%env(AC99f29d040c3d4597b6707e0a0e431758)%'
+            $token: '%env(784b7da6de25c01e56d41ec86abceeb8)%'
+            $from: '%env(+18506697516)%'
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
