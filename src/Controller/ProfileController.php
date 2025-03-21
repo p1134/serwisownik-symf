@@ -33,6 +33,9 @@ class ProfileController extends AbstractController
     public function index(RaportRepository $raports, Request $request, EntityManagerInterface $entityManager): Response
     {
         $user = $this->getUser();
+        if(!$user instanceof User ){
+            throw new \LogicException('Użytkownik nie jest instancji User.');
+        }
 
 
         return $this->render('profile/index.html.twig', [
@@ -41,6 +44,9 @@ class ProfileController extends AbstractController
             'data_sort' == null,
             'raports' => $raports->getAllRaports($user),
             'form_type' => '',
+            'name' => $user->getName(),
+            'surname' => $user->getSurname(),
+            'phoneNumber' => $user->getPhoneNumber(),
         ]);
     }
 
@@ -295,7 +301,7 @@ public function __construct(private EmailVerifier $emailVerifier)
             ->html("<p>Aby zresetować hasło, kliknij <a href=\"$link\">tutaj</a></p>");
 
         $mailer->send($email);
-        $this->addFlash('success', 'Wiadomość potwierdzająca zmianę hasła została wysłana na adres email');
+        $this->addFlash('success', 'Wiadomość potwierdzająca została wysłana na adres email');
         
         return $this->redirectToRoute('app_profile');
         
@@ -330,4 +336,47 @@ public function __construct(private EmailVerifier $emailVerifier)
             'user' => $user->getUserIdentifier()
         ]);
     }
+
+    #[Route('profile/{user}/edit', 'app_edit_profile')]
+        public function editUserProfile(Request $request, EntityManagerInterface $entityManager, RaportRepository $raports){
+            $user = $this->getUser();
+
+            $form = $this->createForm(ProfileType::class, $user);
+            $form->handleRequest($request);
+            
+            if(!$user instanceof User){
+                throw new \LogicException('Oczekiwana instancja klasy User');
+            }
+
+            if($form->isSubmitted() && $form->isValid()){
+                $data = $form->getData();
+                // dd($data['name']);
+                if($data->getName() != null){
+                    $user->setName($data->getName());
+                }
+                if($data->getSurname() != null){
+                    $user->setSurname($data->getSurname());
+                }
+                if($data->getPhoneNumber() != null){
+                    $user->setPhoneNumber($data->getPhoneNumber());
+                }
+                $entityManager->persist($user);
+                $entityManager->flush();
+
+                $this->addFlash('success', 'Twój profil został zaktualizowany');
+                return $this->redirectToRoute('app_profile');
+
+            }
+
+            return $this->render('profile/index.html.twig', [
+                'form_type' => 'edit_profile',
+                'form' => $form->createView(),
+                'user' => $user->getUserIdentifier(),
+                'raports' => $raports->getAllRaports($user),
+                'name' => $user->getName(),
+                'surname' => $user->getSurname(),
+                'phoneNumber' => $user->getPhoneNumber(),
+            ]);
+        }
+    
 }

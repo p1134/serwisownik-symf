@@ -302,6 +302,7 @@
   padding-left: 1.3em;
   width: 15em;
   transition: width 0.2s ease-in-out;
+  overflow: hidden;
 }
 .nav__profile {
   width: 100%;
@@ -317,6 +318,7 @@
   width: 100%;
   justify-content: center;
   transition: justify-content 0.2s ease-in-out;
+  cursor: pointer;
 }
 .nav__btn-box--wide {
   margin-right: 5em;
@@ -324,13 +326,19 @@
   transition: justify-content 0.2s ease-in-out;
 }
 .nav__hidden {
-  display: none;
+  visibility: hidden;
+  position: absolute;
   margin-left: 1em;
   color: white;
   font-weight: 200;
+  transition: display 0.2s ease-in-out;
 }
 .nav__hidden--wide {
   display: block;
+  position: static;
+  visibility: visible;
+  transition: display 0.2s ease-in-out;
+  transition: visibility 0.1s ease-in-out;
 }
 
 .profile__icon i {

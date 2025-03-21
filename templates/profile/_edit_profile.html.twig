@@ -1,0 +1,31 @@
+{{ form_start(form) }}
+
+{% block form_errors %}
+    <div class="text-red-400 font-extralight">
+        {{ form_errors(form.name) }}
+        {{ form_errors(form.surname) }}
+        {{ form_errors(form.phoneNumber) }}
+    </div>
+{% endblock %}
+            {# {{ form_errors(form.name, {'attr': {'class': 'text-white'}}) }} #}
+<div class="flex flex-col w-full h-full gap-8 place-items-center justify-center text-white">
+    <div class="flex w-full h-full gap-4 place-items-center justify-center text-white">
+        <div class="flex flex-col gap-1">
+            {{ form_label(form.name, 'Imię') }}
+            {{ form_widget(form.name, {'attr': {'class': 'form__widget rounded-md border border-gray-700'}}) }}
+        </div>
+        <div class="flex flex-col gap-1">
+            {{ form_label(form.surname, 'Nazwisko') }}
+            {{ form_widget(form.surname, {'attr': {'class': 'form__widget rounded-md border border-gray-700'}}) }}
+        </div>
+        <div class="flex flex-col gap-1">
+            {{ form_label(form.phoneNumber, 'Numer telefonu') }}
+            {{ form_widget(form.phoneNumber, {'attr': {'class': 'form__widget rounded-md border border-gray-700'}}) }}
+        </div>
+    </div>
+    <div class="flex w-full place-items-center justify-center text-white gap-4">
+    <button type="submit" class="profile__btn rounded-md w-1/2">Zapisz zmiany</button>
+    <a href="{{ path('app_profile') }}" class="profile__btn rounded-md w-1/2 text-center">Anuluj</a>
+    </div>
+</div>
+    {{ form_end(form) }}
