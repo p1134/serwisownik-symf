@@ -2,7 +2,7 @@
 
 namespace App\Service;
 
-require __DIR__ . '/vendor/autoload.php';
+// require __DIR__ . '/vendor/autoload.php';
 use Twilio\Rest\Client;
 
 class SmsService{
@@ -20,12 +20,18 @@ class SmsService{
     public function sendSms(string $to, string $message)
     {
         $client = new Client($this->sid, $this->token);
-        $client->messages->create(
+        try{
+            $message = $client->messages->create("+48".
             $to,
             [
                 'from' => $this->from,
-                'body' => $this->$message,
-            ]
-        );
+                'body' => $message,
+                ]
+            );
+            return $message->sid;
+        } catch(\Exception $e) {
+            return 'Error: '.$e->getMessage();
+        }
+
     }
 }

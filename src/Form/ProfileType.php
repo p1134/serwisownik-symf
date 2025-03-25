@@ -29,7 +29,8 @@ class ProfileType extends AbstractType
                         'minMessage' =>'Imię musi posiadać przynajmniej {{ limit }} znaki',
                         'maxMessage' => 'Imię nie moze być dłuzsze niz {{ limit }} znaków'
                     ])
-                ]
+                    ],
+                    'required' => false,
             ])
             ->add('surname', TextType::class,
             [
@@ -40,7 +41,8 @@ class ProfileType extends AbstractType
                         'minMessage' =>'Nazwisko musi posiadać przynajmniej {{ limit }} znaki',
                         'maxMessage' => 'Nazwisko nie moze być dłuzsze niz {{ limit }} znaków'
                 ])
-                ]
+                    ],
+                'required' => false,
             ])
             ->add('phoneNumber', TelType::class, [
                 'constraints' => [
@@ -53,7 +55,8 @@ class ProfileType extends AbstractType
                     //     'pattern' => '/^\d{9}$/', 
                     // ]),
             
-                ]
+                ],
+            'required' => false,
             ])
             // ->add('sms', BooleanType::class, [
             //     'mapped' => false

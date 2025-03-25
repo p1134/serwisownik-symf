@@ -57,7 +57,13 @@
                     </div>
                     <div class="profile__icon flex place-items-center">
                         <label class="flex justify-center place-items-center gap-4">
-                            <input class="toggle-checkbox" type="checkbox" name="sms" id="sms">
+                        {% if phoneNumber is defined and phoneNumber is not null %}
+                            <form action="{{ path('app_sms', {'user': user}) }}">
+                                <input class="toggle-checkbox" type="checkbox" name="sms" id="sms" onchange="this.form.submit()">
+                            </form>
+                            {% else %}
+                            <input class="toggle-checkbox" type="checkbox" name="sms" id="sms" disabled>
+                            {% endif %}
                             <span class="toggle-btn"></span>
                             <p class="cursor-pointer">Powiadomienia SMS</p>
                         </label>
@@ -92,6 +98,8 @@
                         {{ include('profile/_edit_email.html.twig', {'form': form}) }}
                     {% elseif form_type == 'edit_profile' %}
                         {{ include('profile/_edit_profile.html.twig', {'form': form}) }}
+                    {% elseif form_type == 'verification' %}
+                        {{ include('profile/_verification_sms.html.twig', {'form': form}) }}
                     {% else %}
                         <img src="{{ asset('img/logo.png') }}" alt="" class="h-4/5">
                     {% endif %}
