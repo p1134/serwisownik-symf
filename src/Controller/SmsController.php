@@ -86,6 +86,7 @@ class SmsController extends AbstractController
             'surname' => $user->getSurname(),
             'phoneNumber' => $user->getPhoneNumber(),
             'smsStatus' => $smsStatus,
+            'raport' => 'raport' ?? null,
         ]);
     }
 }

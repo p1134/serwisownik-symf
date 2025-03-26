@@ -38,6 +38,8 @@ class ProfileController extends AbstractController
             throw new \LogicException('Użytkownik nie jest instancji User.');
         }
 
+        $raport = $request->query->get('raport');
+
 
         return $this->render('profile/index.html.twig', [
             'controller_name' => 'ProfileController',
@@ -48,24 +50,46 @@ class ProfileController extends AbstractController
             'name' => $user->getName(),
             'surname' => $user->getSurname(),
             'phoneNumber' => $user->getPhoneNumber(),
+            'raport' => $raport ?? null,
         ]);
     }
 
     #[Route('profile/raport', name: 'app_profile_raport')]
-    public function newRaport(EntityManagerInterface $entityManager, RaportRepository $raports, RepairRepository $repairs): response
+    public function newRaport(EntityManagerInterface $entityManager, RaportRepository $raports, RepairRepository $repairs, Request $request): response
     {
         
         $user = $this->getUser();
         if(!$user instanceof User){
             throw new \LogicException('Użytkownik nie jest instancji User.');
         }
+
+        $raportType = $request->query->get('raport');
+
         $date = new \DateTime('now');
     
             $pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', true);
 
             
             $logo = $this->getParameter('kernel.project_dir') . '/public/img/logo.png';
-            $data = $repairs->getReport($user);
+
+            switch ($raportType) {
+                case 'raport_month':
+                    $data = $repairs->getReportMonth($user);
+                    break;
+
+                case 'raport_year':
+                    $data = $repairs->getReportYear($user);
+                    break;
+
+                case 'raport_all':
+                    $data = $repairs->getReportAll($user);
+                    break;
+            
+            default:
+            $data = $repairs->getReportAll($user);
+                break;
+        }
+
             $parts = [
                 "mechanic" => "Mechaniczne",
                 "body" => "Karoseryjne",
@@ -169,6 +193,7 @@ class ProfileController extends AbstractController
                 'controller_name' => 'ProfileController',
                 'user' => $user->getUserIdentifier(),
                 'data_sort' => null,
+                'raport' => $raport ?? null,
             ]);
         }
            
@@ -202,6 +227,7 @@ class ProfileController extends AbstractController
 public function editProfile(Request $request, EntityManagerInterface $entityManager, RaportRepository $raports, UserPasswordHasherInterface $userPass){
 
     $user = $this->getUser();
+    $raport = $request->query->get('raport');
 
     if(!$user){
         $this->addFlash('error', 'Uzytkownik niezalogowany');
@@ -272,6 +298,7 @@ public function editProfile(Request $request, EntityManagerInterface $entityMana
         'form' => $form->createView(),
         'user' => $user->getUserIdentifier(),
         'raports' => $raports->getAllRaports($user),
+        'raport' => $raport ?? null,
     ]);
 }
 
@@ -342,6 +369,8 @@ public function __construct(private EmailVerifier $emailVerifier)
         public function editUserProfile(Request $request, EntityManagerInterface $entityManager, RaportRepository $raports){
             $user = $this->getUser();
 
+            $raport = $request->query->get('raport');
+
             $form = $this->createForm(ProfileType::class, $user);
             $form->handleRequest($request);
             
@@ -377,6 +406,7 @@ public function __construct(private EmailVerifier $emailVerifier)
                 'name' => $user->getName(),
                 'surname' => $user->getSurname(),
                 'phoneNumber' => $user->getPhoneNumber(),
+                'raport' => $raport ?? null,
             ]);
         }
     

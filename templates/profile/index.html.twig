@@ -79,17 +79,28 @@
         </div>
         <div class="right__box h-screen w-full mt-10 mb-10 flex flex-col gap-10">
             <div class="main__box raport__box flex flex-col w-full h-1/2 ring-1 ring-gray-700 rounded-xl justify-between p-8">
-                <div class="raport__box-content overflow-y-scroll flex flex-col gap-1">
-                    <table>
-                    {% for raport in raports %}
-                        <tr class="flex gap-2 font-thin place-items-center">
-                            <td class="w-1/2">
-                                <a href="{{ path('app_profile_raport_download', {'id': raport.id}) }}" class="raport cursor-pointer text-gray-200"><i class="fa-solid fa-file-pdf mr-4"></i>{{ raport.filename }}</a>
-                            </td>
-                            <td class="text-gray-300">{{ raport.dateCreate|date('d-m-Y') }}</td>
-                        </tr>
-                    {% endfor %}
-                    </table>
+                <div class="flex flex-row overflow-y-scroll gap-1">
+                    <div class="raport__box-content overflow-y-scroll flex flex-col gap-1 w-full">
+                        <table>
+                        {% for raport in raports %}
+                            <tr class="flex gap-2 font-thin place-items-center">
+                                <td class="w-3/4">
+                                    <a href="{{ path('app_profile_raport_download', {'id': raport.id}) }}" class="raport cursor-pointer text-gray-200"><i class="fa-solid fa-file-pdf mr-4"></i>{{ raport.filename }}</a>
+                                </td>
+                                <td class="text-gray-300">{{ raport.dateCreate|date('d-m-Y') }}</td>
+                            </tr>
+                        {% endfor %}
+                        </table>
+                    </div>
+                    <div class="raport_btn">
+                        <form action="{{ path('app_profile') }}" method="GET">
+                            <select name="raport" id="raport" onchange="this.form.submit()" class="rounded-md bg-transparent appearance-none text-white text-md pl-4 w-auto pr-4">
+                                <option {% if raport is empty %} selected {% endif %} value="raport_all">Wszystko</option>
+                                <option  value="raport_year" {% if raport == 'raport_year' %} selected {% endif %}>Obecny rok</option>
+                                <option value="raport_month" {% if raport == 'raport_month' %} selected {% endif %}>Obecny miesiąc</option>
+                            </select>
+                        </form>
+                    </div>
                 </div>
                 <a href="{{ path('app_profile_raport') }}" class="w-full mt-6"><button class="profile__btn w-full rounded-md">Generuj raport</button></a>
             </div>

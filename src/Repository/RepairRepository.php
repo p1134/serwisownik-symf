@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Repair;
+use DateTime;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
@@ -62,7 +63,7 @@ class RepairRepository extends ServiceEntityRepository
             ->orderBy('r.dateRepair', 'DESC');
         }
         
-        public function getReport($user): array{
+        public function getReportMonth($user): array{
 
             $now = new \DateTime('now');
             $currentStart = clone($now)->modify('first day of this month')->setTime(0, 0);
@@ -79,9 +80,38 @@ class RepairRepository extends ServiceEntityRepository
             ->setParameter('ownerId', $user->getId())
             ->getQuery();
             return $query->getResult();
-            // dd($query);
-
         }
+
+        public function getReportYear($user):array{
+            $now = new DateTime('now');
+            $year = clone($now)->modify('YY');
+
+            $query = $this->findAllQuery(withVehicle: true, withPart: true, withDateRepair: true, withPrice: true, withDescription: true)
+            ->addSelect('v.brand')
+            ->addSelect('v.model')
+            ->addSelect('v.numberPlate')
+            ->where('YEAR(r.dateRepair) = :year')
+            ->setParameter('year', $year)
+            ->andWhere('v.owner = :ownerId')
+            ->setParameter('ownerId', $user->getId())
+            ->getQuery();
+
+            return $query->getResult();
+        }
+
+        public function getReportAll($user):array{
+            
+            $query = $this->findAllQuery(withVehicle: true, withPart: true, withDateRepair: true, withPrice: true, withDescription: true)
+            ->addSelect('v.brand')
+            ->addSelect('v.model')
+            ->addSelect('v.numberPlate')
+            ->andWhere('v.owner = :ownerId')
+            ->setParameter('ownerId', $user->getId())
+            ->getQuery();
+
+            return $query->getResult();
+        }
+
         public function findAllBySort($user, $sort, array $filters){
         
         $query = $this->findAllByVehicle($user);
