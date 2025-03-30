@@ -2,20 +2,23 @@
 
 namespace App\Controller;
 
+use DateTime;
 use Exception;
 use App\Entity\User;
 use App\Form\SmsType;
-use App\Repository\RaportRepository;
 use App\Service\SmsService;
 use App\Repository\UserRepository;
+use App\Repository\RaportRepository;
+use App\Repository\RepairRepository;
 use PhpParser\Node\Expr\Instanceof_;
+use App\Repository\VehicleRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\Form\FormTypeInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Form\FormTypeInterface;
 
 class SmsController extends AbstractController
 {
@@ -37,7 +40,6 @@ class SmsController extends AbstractController
 
         $phoneNumber = $user->getPhoneNumber();
         $sms = $user->isSms();
-        $verificationCode = rand(100000, 999999);
         
         if($phoneNumber === 0 || $phoneNumber === null){
             $this->addFlash('error', 'Brak przypisanego numeru telefonu');
@@ -48,11 +50,15 @@ class SmsController extends AbstractController
         }
 
         else{
+            $verificationCode = rand(100000, 999999);
             $message = "Kod weryfikacyjny: ".$verificationCode;
             $smsStatus = $this->SmsService->sendSms($phoneNumber, $message);
             
             $session = $request->getSession();
-            $session->set('verification_code', $verificationCode);
+            if(!$session->has('verification_code')){
+                $session->set('verification_code', $verificationCode);
+                $session->save();
+            }
             
             if(strpos($smsStatus, 'Error') === false){
                 $this->addFlash('success', 'Kod weryfikacyjny został wysłany');
@@ -66,9 +72,12 @@ class SmsController extends AbstractController
             $form->handleRequest($request);
             if($form->isSubmitted() && $form->isValid()){
                 $code = $form->get('code')->getData();
-                // dd($code);
-                if($code === $session->get('verification_code')){
+
+                if($code == $session->get('verification_code')){
                     $user->setSms(true);
+            }
+            else{
+                return $this->redirectToRoute('app_edit_profile');
             }
         }
         $entityManager->persist($user);
@@ -85,8 +94,17 @@ class SmsController extends AbstractController
             'name' => $user->getName(),
             'surname' => $user->getSurname(),
             'phoneNumber' => $user->getPhoneNumber(),
-            'smsStatus' => $smsStatus,
+            // 'smsStatus' => $smsStatus,
             'raport' => 'raport' ?? null,
         ]);
+    }
+    
+    #[Route('/profile/{user}/send-notification', name: 'app_notification')]
+    public function sendNotification(Request $request, RaportRepository $raports, VehicleRepository $vehicles)
+    {
+        $user = $this->getUser();
+        $now = new DateTime('now');
+
+
     }
 }

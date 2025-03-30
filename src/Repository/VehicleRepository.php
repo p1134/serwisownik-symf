@@ -164,6 +164,32 @@ class VehicleRepository extends ServiceEntityRepository
         ->getResult();
     }
 
+    public function smsServiceNotification(){
+
+        $now = new DateTime('now');
+        $smsDay = clone($now);
+        $smsDay->modify('+7 days')->setTime(0,0,0);
+        return $this->findAllQuery(
+        )
+        ->Where('v.service = :smsDay')
+        ->setParameter('smsDay', $smsDay)
+        ->getQuery()
+        ->getResult();
+    }
+
+    public function smsInsuranceNotification(){
+
+        $now = new DateTime('now');
+        $smsDay = clone($now);
+        $smsDay->modify('+7 days')->setTime(0,0,0);
+        return $this->findAllQuery(
+        )
+        ->Where('v.service = :smsDay')
+        ->setParameter('smsDay', $smsDay)
+        ->getQuery()
+        ->getResult();
+    }
+
 
 
     
