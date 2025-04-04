@@ -57,14 +57,10 @@
                     </div>
                     <div class="profile__icon flex place-items-center">
                         <label class="flex justify-center place-items-center gap-4">
-                        {% if phoneNumber is defined and phoneNumber is not null %}
                             <form action="{{ path('app_sms', {'user': user}) }}">
-                                <input class="toggle-checkbox" type="checkbox" name="sms" id="sms" onchange="this.form.submit()">
+                                <input class="toggle-checkbox" type="checkbox" name="sms" id="sms" onchange="this.form.submit()" {% if phoneNumber is not defined or phoneNumber is null %}disabled{% endif %} {% if sms is not null %}checked{% endif %}>
+                                <span class="toggle-btn"></span>
                             </form>
-                            {% else %}
-                            <input class="toggle-checkbox" type="checkbox" name="sms" id="sms" disabled>
-                            {% endif %}
-                            <span class="toggle-btn"></span>
                             <p class="cursor-pointer">Powiadomienia SMS</p>
                         </label>
                     </div>

@@ -43,29 +43,50 @@ class SmsController extends AbstractController
         
         if($phoneNumber === 0 || $phoneNumber === null){
             $this->addFlash('error', 'Brak przypisanego numeru telefonu');
+            return $this->redirectToRoute('app_profile');
         }
 
-        elseif($sms === false){
-            $this->addFlash('error', 'Brak pozwolenia na otrzymywanie powiadomień');
+        // elseif($sms === false){
+        //     $this->addFlash('error', 'Brak pozwolenia na otrzymywanie powiadomień');
+        //     return $this->redirectToRoute('app_profile');
+        // }
+        elseif($sms === true){
+            $user->setSms(null);
+
+            $entityManager->persist($user);
+            $entityManager->flush();
+
+            $session = $request->getSession();
+            $session->remove('verification_code');
+            $session->save();
+
+            $entityManager->persist($user);
+            $entityManager->flush();
+
+            $this->addFlash('success', 'Powiadomienia SMS zostały wyłączone');
+            return $this->redirectToRoute('app_profile');
         }
 
         else{
             $verificationCode = rand(100000, 999999);
             $message = "Kod weryfikacyjny: ".$verificationCode;
-            $smsStatus = $this->SmsService->sendSms($phoneNumber, $message);
             
             $session = $request->getSession();
+            
             if(!$session->has('verification_code')){
+
+                $smsStatus = $this->SmsService->sendSms($phoneNumber, $message);
+
                 $session->set('verification_code', $verificationCode);
                 $session->save();
-            }
-            
-            if(strpos($smsStatus, 'Error') === false){
-                $this->addFlash('success', 'Kod weryfikacyjny został wysłany');
+                
+                if(strpos($smsStatus, 'Error') === false){
+                    $this->addFlash('success', 'Kod weryfikacyjny został wysłany');
+                }
+                else {
+                    $this->addFlash('error', 'Wystąpił problem z wysłaniem kodu: ' . $smsStatus);
+                }
                 // return $this->redirectToRoute('app_profile');
-            }
-            else {
-                $this->addFlash('error', 'Wystąpił problem z wysłaniem kodu: ' . $smsStatus);
             }
             
             $form = $this->createForm(SmsType::class);
@@ -74,19 +95,22 @@ class SmsController extends AbstractController
                 $code = $form->get('code')->getData();
 
                 if($code == $session->get('verification_code')){
-                    $user->setSms(true);
+                    $user->setSms(true);    
+                    $entityManager->persist($user);
+                    $entityManager->flush();
+                    $this->addFlash('success', 'Powiadomienia SMS zostały włączone');
+                    return $this->redirectToRoute('app_profile');
+                }
+                
+                else{
+                    return $this->redirectToRoute('app_profile');
+                }
             }
-            else{
-                return $this->redirectToRoute('app_edit_profile');
-            }
-        }
-        $entityManager->persist($user);
-        $entityManager->flush();
     }
         
         
         return $this->render('profile/index.html.twig', [
-            'verificationCode' => $verificationCode,
+            'verificationCode' => $verificationCode ?? null,
             'form_type' => 'verification',
             'form' => $form->createView(),
             'user' => $user->getUserIdentifier(),
@@ -96,6 +120,7 @@ class SmsController extends AbstractController
             'phoneNumber' => $user->getPhoneNumber(),
             // 'smsStatus' => $smsStatus,
             'raport' => 'raport' ?? null,
+            'sms' => $sms ?? null,
         ]);
     }
     
@@ -104,7 +129,6 @@ class SmsController extends AbstractController
     {
         $user = $this->getUser();
         $now = new DateTime('now');
-
 
     }
 }

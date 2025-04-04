@@ -37,6 +37,7 @@ class ProfileController extends AbstractController
         if(!$user instanceof User ){
             throw new \LogicException('Użytkownik nie jest instancji User.');
         }
+        $sms = $user->isSms();
 
         $raport = $request->query->get('raport');
 
@@ -51,6 +52,7 @@ class ProfileController extends AbstractController
             'surname' => $user->getSurname(),
             'phoneNumber' => $user->getPhoneNumber(),
             'raport' => $raport ?? null,
+            'sms' => $sms ?? null,
         ]);
     }
 
@@ -62,6 +64,8 @@ class ProfileController extends AbstractController
         if(!$user instanceof User){
             throw new \LogicException('Użytkownik nie jest instancji User.');
         }
+
+        $sms = $user->isSms();
 
         $raportType = $request->query->get('raport');
 
@@ -194,6 +198,7 @@ class ProfileController extends AbstractController
                 'user' => $user->getUserIdentifier(),
                 'data_sort' => null,
                 'raport' => $raport ?? null,
+                'sms' => $sms ?? null,
             ]);
         }
            
@@ -228,7 +233,7 @@ public function editProfile(Request $request, EntityManagerInterface $entityMana
 
     $user = $this->getUser();
     $raport = $request->query->get('raport');
-
+    
     if(!$user){
         $this->addFlash('error', 'Uzytkownik niezalogowany');
         return $this->redirectToRoute('app_login');
@@ -236,6 +241,7 @@ public function editProfile(Request $request, EntityManagerInterface $entityMana
     if (!$user instanceof User) {
         throw new \LogicException('Oczekiwana instancja klasy User');
     }
+    $sms = $user->isSms();
     
     $form = $this->createForm(changeEmailType::class);
     $form->handleRequest($request);
@@ -299,6 +305,7 @@ public function editProfile(Request $request, EntityManagerInterface $entityMana
         'user' => $user->getUserIdentifier(),
         'raports' => $raports->getAllRaports($user),
         'raport' => $raport ?? null,
+        'sms' => $sms ?? null,
     ]);
 }
 
@@ -378,6 +385,8 @@ public function __construct(private EmailVerifier $emailVerifier)
                 throw new \LogicException('Oczekiwana instancja klasy User');
             }
 
+            $sms = $user->isSms();
+
             if($form->isSubmitted() && $form->isValid()){
                 $data = $form->getData();
                 // dd($data['name']);
@@ -407,6 +416,7 @@ public function __construct(private EmailVerifier $emailVerifier)
                 'surname' => $user->getSurname(),
                 'phoneNumber' => $user->getPhoneNumber(),
                 'raport' => $raport ?? null,
+                'sms' => $sms ?? null,
             ]);
         }
     
