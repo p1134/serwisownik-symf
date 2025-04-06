@@ -10,7 +10,6 @@ WORKDIR /twilio
 ENV PATH="vendor/bin:$PATH"
 
 COPY src src
-COPY tests tests
 COPY composer* ./
 
 COPY --from=composer:latest /usr/bin/composer /usr/local/bin/composer
