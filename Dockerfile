@@ -13,5 +13,5 @@ COPY src src
 COPY composer* ./
 
 COPY --from=composer:latest /usr/bin/composer /usr/local/bin/composer
-RUN composer install --prefer-dist --no-interaction --verbose
 
+RUN composer clear-cache && composer install --prefer-dist --no-interaction --verbose || true
