@@ -14,4 +14,4 @@ COPY composer* ./
 
 COPY --from=composer:latest /usr/bin/composer /usr/local/bin/composer
 
-RUN composer clear-cache && composer install --prefer-dist --no-interaction --verbose || true
+RUN composer clear-cache && composer install --prefer-dist --no-interaction --verbose
